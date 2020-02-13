@@ -4,6 +4,7 @@ on: [push]
 
 env:
   buildConfiguration: release
+  SONAR_TOKEN: c19462b82d0459a57781b0b16b7329f6bf0706d1  
 
 jobs:
   build:
