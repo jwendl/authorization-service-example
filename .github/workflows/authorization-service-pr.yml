@@ -28,9 +28,11 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SonarToken }} 
 
-  secretScan:
+  credScan:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Secret Scan
-        uses: max/secret-scan@1.0.0
+    - name: gitCret
+      uses: CySeq/gitcret@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
