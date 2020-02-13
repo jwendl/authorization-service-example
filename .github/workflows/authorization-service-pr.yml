@@ -20,3 +20,12 @@ jobs:
       run: dotnet build ./ApiExampleProject/ApiExampleProject.sln --configuration Release
     - name: Test with dotnet
       run: dotnet test ./ApiExampleProject/ApiExampleProject.sln --filter Category!=Integration --configuration Release
+
+  scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v1.1
+      - name: Secret Scan
+        uses: max/secret-scan@1.0.0
