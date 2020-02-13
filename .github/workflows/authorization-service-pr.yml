@@ -1,6 +1,12 @@
 name: Authorization Service PR  
 
-on: [push]
+on:
+  pull_request:
+    branches: 
+      - master
+  push:
+    branches:
+      - master
 
 env:
   buildConfiguration: release
@@ -18,4 +24,5 @@ jobs:
         dotnet-version: 3.1.101
     - name: Build with dotnet
       run: dotnet build --configuration Release ApiExampleProject/ApiExampleProject.sln
-
+    - name: Test with dotnet
+      run: dotnet test ./src/Solution.sln --configuration Release
