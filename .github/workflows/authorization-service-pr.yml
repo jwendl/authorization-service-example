@@ -23,16 +23,21 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1.1
-        env:
-          SONAR_TOKEN: ${{ secrets.SonarToken }} 
+    - uses: actions/checkout@v2
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@v1.1
+      env:
+        SONAR_TOKEN: ${{ secrets.SonarToken }} 
 
   credScan:
     runs-on: ubuntu-latest
     needs: build
     steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
     - name: gitCret
       uses: CySeq/gitcret@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
