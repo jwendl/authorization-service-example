@@ -1,0 +1,21 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+  },
+  "TokenValidator": {
+    "Audience": "api://jw-example-api",
+    "TenantId": "",
+    "ClientId": ""
+  },
+  "TokenCreator": {
+    "TenantId": "",
+    "ClientId": "",
+    "ClientSecret": "",
+    "Scopes": "https://graph.microsoft.com/User.Read"
+  },
+  "Database": {
+    "ConnectionString": ""
+  }
+}
