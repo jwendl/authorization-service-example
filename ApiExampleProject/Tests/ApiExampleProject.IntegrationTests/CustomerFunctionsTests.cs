@@ -32,6 +32,7 @@ namespace ApiExampleProject.IntegrationTests
         }
 
         [Fact]
+        [Trait("Category", "Integration")]
         public async Task CreateCustomer()
         {
             var customerGenerator = new Faker<Customer>()
