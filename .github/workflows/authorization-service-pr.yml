@@ -4,7 +4,6 @@ on: [push]
 
 env:
   buildConfiguration: release
-  SONAR_TOKEN: c19462b82d0459a57781b0b16b7329f6bf0706d1  
 
 jobs:
   build:
@@ -26,6 +25,8 @@ jobs:
     steps:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v1.1
+        env:
+          SONAR_TOKEN: ${{ secrets.SonarToken }} 
 
   secretScan:
     runs-on: ubuntu-latest
