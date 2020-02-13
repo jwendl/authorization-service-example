@@ -1,12 +1,6 @@
 name: Authorization Service PR  
 
-on:
-  pull_request:
-    branches: 
-      - master
-  push:
-    branches:
-      - master
+on: [push]
 
 env:
   buildConfiguration: release
