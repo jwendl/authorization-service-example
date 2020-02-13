@@ -1,0 +1,16 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+  },
+  "TokenValidator": {
+    "Audience": "api://api-example",
+    "TenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+    "ClientId": "e16bb3bb-3c32-4bd6-a070-c935e2cdcdcb"
+  },
+  "CosmosConfiguration": {
+    "EndpointLocation": "",
+    "PrimaryKey": ""
+  }
+}

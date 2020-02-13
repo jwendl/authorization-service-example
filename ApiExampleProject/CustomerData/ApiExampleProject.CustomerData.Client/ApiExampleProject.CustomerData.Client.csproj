@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisRuleSet>$(RepoDir)\Global.ruleset</CodeAnalysisRuleSet>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <ProjectGuid>{C29FE0E2-EE15-4EE5-80AB-170ED9F0E686}</ProjectGuid>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.1.1" />
+    <PackageReference Include="Polly" Version="7.2.0" />
+    <PackageReference Include="Polly.Extensions.Http" Version="3.0.0" />
+    <PackageReference Include="Refit" Version="5.0.23" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="5.0.23" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(RepoDir)\Libraries\ApiExampleProject.Authentication\ApiExampleProject.Authentication.csproj" />
+    <ProjectReference Include="$(RepoDir)\CustomerData\ApiExampleProject.CustomerData.DataAccess\ApiExampleProject.CustomerData.DataAccess.csproj" />
+    <ProjectReference Include="$(RepoDir)\Libraries\ApiExampleProject.Common\ApiExampleProject.Common.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,142 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #><# 
+    var models = new List<string>()
+    {
+        "Thing",
+        "ThingAttribute",
+        "ThingPolicy",
+        "User",
+        "UserAttribute",
+    };
+#>using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Aliencube.AzureFunctions.Extensions.OpenApi.Attributes;
+using ApiExampleProject.Authentication.Interfaces;
+using ApiExampleProject.Common.Constants;
+using ApiExampleProject.Common.Interfaces;
+using ApiExampleProject.Common.Pagination;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using PolicyManager.DataAccess.Interfaces;
+using PolicyManager.DataAccess.Models;
+using PolicyManager.DataAccess.Validators;
+using PolicyManager.Resources;
+
+<#
+    Func<string, string> pluralize = (word) =>
+    {
+        if (word.EndsWith("y")) return $"{word.Substring(0, word.Length - 1)}ies";
+
+        return $"{word}s";
+    };
+
+    foreach (var model in models)
+    {
+        var lowerModel = $"{ Char.ToLower(model.First()) }{ model.Substring(1) }";
+#>
+namespace PolicyManager
+{
+    public class <#= model #>Functions
+        : BaseCrudFunctions<<#= model #>>
+    {
+        public <#= model #>Functions(ITokenValidator tokenValidator, IJsonHttpContentValidator jsonHttpContentValidator, IDataRepository<<#= model #>> <#= lowerModel #>Repository)
+            : base(tokenValidator, jsonHttpContentValidator, <#= lowerModel #>Repository)
+        {
+
+        }
+
+        [FunctionName(nameof(Create<#= model #>))]
+        [OpenApiOperation(nameof(Create<#= model #>), "Create a <#= model #>", Description = "Creates a <#= lowerModel #> item.")]
+        [OpenApiParameter("Authorization", In = ParameterLocation.Header, Required = true, Type = typeof(string))]
+        [OpenApiRequestBody(ContentTypes.Application.Json, typeof(<#= model #>), Description = "The new <#= lowerModel #> object.")]
+        [OpenApiResponseBody(HttpStatusCode.Created, ContentTypes.Application.Json, typeof(<#= model #>))]
+        [OpenApiResponseBody(HttpStatusCode.BadRequest, ContentTypes.TextType.Plain, typeof(string))]
+        public async Task<HttpResponseMessage> Create<#= model #>([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "<#= pluralize(lowerModel) #>")] HttpRequestMessage req, ILogger log)
+        {
+            _ = req ?? throw new ArgumentNullException(nameof(req));
+
+            log.LogInformation(PolicyManagerCrudResources.Create<#= model #>StartLog);
+            var httpResponseMessage = await base.CreateItemAsync<<#= model #>Validator>(req);
+            log.LogInformation(PolicyManagerCrudResources.Create<#= model #>EndLog);
+            return httpResponseMessage;
+        }
+
+        [FunctionName(nameof(Read<#= model #>s))]
+        [OpenApiOperation(nameof(Read<#= model #>s), "Read all <#= model #>s", Description = "Returns all <#= lowerModel #>s.")]
+        [OpenApiParameter("Authorization", In = ParameterLocation.Header, Required = true, Type = typeof(string))]
+        [OpenApiRequestBody(ContentTypes.Application.Json, typeof(PaginationRequest), Description = "Pagination functionality for request.")]
+        [OpenApiResponseBody(HttpStatusCode.OK, ContentTypes.Application.Json, typeof(IEnumerable<<#= model #>>))]
+        [OpenApiResponseBody(HttpStatusCode.BadRequest, ContentTypes.TextType.Plain, typeof(string))]
+        public async Task<HttpResponseMessage> Read<#= model #>s([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "<#= pluralize(lowerModel) #>/{pageNumber?}/{pageSize?}")] HttpRequestMessage req, ILogger log, string pageNumber, string pageSize)
+        {
+            _ = req ?? throw new ArgumentNullException(nameof(req));
+
+            log.LogInformation(PolicyManagerCrudResources.Read<#= pluralize(model) #>StartLog);
+            var httpResponseMessage = await ReadItemsAsync(req, pageNumber, pageSize);
+            log.LogInformation(PolicyManagerCrudResources.Read<#= pluralize(model) #>EndLog);
+            return httpResponseMessage;
+        }
+
+        [FunctionName(nameof(Read<#= model #>))]
+        [OpenApiOperation(nameof(Read<#= model #>), "Read one <#= model #> by Id", Description = "Returns an <#= lowerModel #>.")]
+        [OpenApiParameter("Authorization", In = ParameterLocation.Header, Required = true, Type = typeof(string))]
+        [OpenApiParameter("<#= lowerModel #>Id", In = ParameterLocation.Path, Required = false, Type = typeof(Guid))]
+        [OpenApiResponseBody(HttpStatusCode.OK, ContentTypes.Application.Json, typeof(<#= model #>))]
+        [OpenApiResponseBody(HttpStatusCode.BadRequest, ContentTypes.TextType.Plain, typeof(string))]
+        public async Task<HttpResponseMessage> Read<#= model #>([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "<#= pluralize(lowerModel) #>/{<#= lowerModel #>Id}")] HttpRequestMessage req, ILogger log, Guid <#= lowerModel #>Id)
+        {
+            _ = req ?? throw new ArgumentNullException(nameof(req));
+
+            log.LogInformation(PolicyManagerCrudResources.Read<#= model #>StartLog);
+            var httpResponseMessage = await ReadItemAsync(req, <#= lowerModel #>Id);
+            log.LogInformation(PolicyManagerCrudResources.Read<#= model #>EndLog);
+            return httpResponseMessage;
+        }
+
+        [FunctionName(nameof(Update<#= model #>))]
+        [OpenApiOperation(nameof(Update<#= model #>), "Update an <#= model #>", Description = "Updates an <#= lowerModel #>.")]
+        [OpenApiParameter("Authorization", In = ParameterLocation.Header, Required = true, Type = typeof(string))]
+        [OpenApiParameter("environmentId", In = ParameterLocation.Path, Required = false, Type = typeof(Guid))]
+        [OpenApiRequestBody(ContentTypes.Application.Json, typeof(<#= model #>), Description = "The <#= lowerModel #> object being updated.")]
+        [OpenApiResponseBody(HttpStatusCode.OK, ContentTypes.Application.Json, typeof(<#= model #>))]
+        [OpenApiResponseBody(HttpStatusCode.BadRequest, ContentTypes.TextType.Plain, typeof(string))]
+        public async Task<HttpResponseMessage> Update<#= model #>([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "<#= pluralize(lowerModel) #>/{<#= lowerModel #>Id}")] HttpRequestMessage req, ILogger log, string <#= lowerModel #>Id)
+        {
+            _ = req ?? throw new ArgumentNullException(nameof(req));
+
+            log.LogInformation(PolicyManagerCrudResources.Update<#= model #>StartLog);
+            var httpResponseMessage = await UpdateItemAsync<<#= model #>Validator>(req, <#= lowerModel #>Id);
+            log.LogInformation(PolicyManagerCrudResources.Update<#= model #>EndLog);
+            return httpResponseMessage;
+        }
+
+        [FunctionName(nameof(Delete<#= model #>))]
+        [OpenApiOperation(nameof(Delete<#= model #>), "Delete an <#= model #>", Description = "Deletes an <#= lowerModel #>.")]
+        [OpenApiParameter("Authorization", In = ParameterLocation.Header, Required = true, Type = typeof(string))]
+        [OpenApiParameter("environmentId", In = ParameterLocation.Path, Required = false, Type = typeof(Guid))]
+        [OpenApiResponseBody(HttpStatusCode.OK, ContentTypes.TextType.Plain, typeof(string))]
+        [OpenApiResponseBody(HttpStatusCode.BadRequest, ContentTypes.TextType.Plain, typeof(string))]
+        public async Task<HttpResponseMessage> Delete<#= model #>([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "<#= pluralize(lowerModel) #>/{<#= lowerModel #>Id}")] HttpRequestMessage req, ILogger log, string <#= lowerModel #>Id)
+        {
+            _ = req ?? throw new ArgumentNullException(nameof(req));
+
+            log.LogInformation(PolicyManagerCrudResources.Delete<#= model #>StartLog);
+            await DeleteItemAsync(req, <#= lowerModel #>Id);
+            log.LogInformation(PolicyManagerCrudResources.Delete<#= model #>EndLog);
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+    }
+}
+
+<#
+    }
+#>

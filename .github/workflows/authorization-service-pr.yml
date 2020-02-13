@@ -1,0 +1,44 @@
+name: Authorization Service PR  
+
+on: [push]
+
+env:
+  buildConfiguration: release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Build with dotnet
+      run: dotnet build ./ApiExampleProject/ApiExampleProject.sln --configuration Release
+    - name: Test with dotnet
+      run: dotnet test ./ApiExampleProject/ApiExampleProject.sln --filter Category!=Integration --configuration Release
+
+  sonarCloud:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v2
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@v1.1
+      env:
+        SONAR_TOKEN: ${{ secrets.SonarToken }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  credScan:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
+    - name: gitCret
+      uses: CySeq/gitcret@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

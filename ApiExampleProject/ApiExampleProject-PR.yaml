@@ -1,0 +1,221 @@
+# Build Pipeline
+
+trigger:
+- none
+pr:
+- master
+
+variables:
+  buildConfiguration: release
+
+stages:
+- stage: Build
+  jobs:
+
+  - job: BuildAndTest
+    displayName: 'Build and Test'
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    steps:
+
+    - task: UseDotNet@2
+      displayName: 'Ensure .NET Core SDK 3.1.100 is installed'
+      inputs:
+        packageType: sdk
+        version: 3.1.100
+        installationPath: $(Agent.ToolsDirectory)/dotnet
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore NuGet Packages'
+      inputs:
+        command: restore
+        projects: '**/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Build Projects'
+      inputs:
+        projects: '**/*.csproj'
+        arguments: '--configuration $(configuration)'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Unit Tests'
+      inputs:
+        command: test
+        projects: '**/*.Tests.csproj'
+        arguments: '--configuration $(buildConfiguration)'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish Customer Data Api'
+      inputs:
+        command: 'publish'
+        publishWebProjects: false
+        projects: '$(System.DefaultWorkingDirectory)/ApiExampleProject/CustomerData/ApiExampleProject.CustomerData/ApiExampleProject.CustomerData.csproj'
+        arguments: '--no-build --configuration $(buildConfiguration) --output $(System.DefaultWorkingDirectory)/Output/CustomerData/'
+        zipAfterPublish: false
+
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Pipeline Artifacts'
+      inputs:
+        targetPath: '$(System.DefaultWorkingDirectory)/Output'
+        artifact: 'BuildFiles'
+
+  - job: CredScan
+    dependsOn: BuildAndTest
+    displayName: 'Cred Scan'
+    pool:
+      vmImage: 'windows-latest'
+
+    variables:
+      AssignTo: 'Justin Wendlandt <juswen@microsoft.com>'
+      AZDOProjectName: 'Functions'
+      AZDOOrgName: 'ApiExampleProject-PR'
+
+    steps:
+    - task: CredScan@2
+      inputs:
+        toolMajorVersion: 'V2'
+
+    - task: SdtReport@1
+      inputs:
+        AllTools: false
+        APIScan: false
+        BinSkim: false
+        CodesignValidation: false
+        CredScan: true
+        FortifySCA: false
+        FxCop: false
+        ModernCop: false
+        MSRD: false
+        PoliCheck: false
+        RoslynAnalyzers: false
+        SDLNativeRules: false
+        Semmle: false
+        TSLint: false
+        ToolLogsNotFoundAction: 'Standard'
+
+    - task: PublishSecurityAnalysisLogs@2
+      inputs:
+        ArtifactName: 'CodeAnalysisLogs'
+        ArtifactType: 'Container'
+        AllTools: true
+        ToolLogsNotFoundAction: 'Standard'
+
+    - task: PostAnalysis@1
+      inputs:
+        AllTools: false
+        APIScan: false
+        BinSkim: false
+        CodesignValidation: false
+        CredScan: true
+        FortifySCA: false
+        FxCop: false
+        ModernCop: false
+        PoliCheck: false
+        RoslynAnalyzers: false
+        SDLNativeRules: false
+        Semmle: false
+        TSLint: false
+        ToolLogsNotFoundAction: 'Standard'
+
+    - task: CreateWorkItem@1
+      displayName: 'Create work item'
+      inputs:
+        teamProject: $(AZDOProjectName)
+        workItemType: Bug
+        title: 'CredScan Task Failed: $(System.PullRequest.PullRequestId)'
+        assignedTo: '$(AssignTo)'
+        fieldMappings: 'System Info=Credential Scanning Task Failed. For more information please refer to this <a href="$(System.TeamFoundationCollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)">link</a>'
+        associate: true
+        linkPR: true
+        preventDuplicates: true
+        keyFields: System.Title
+        createOutputs: true
+        outputVariables: 'CWI.Id=System.Id'
+      condition: failed()
+
+    - task: CreatePRCommentTask@0
+      displayName: 'Create PR Comment'
+      inputs:
+        Comment: 'CredScan reports a <a href="https://dev.azure.com/$(AZDOOrgName)/$(AZDOProjectName)/_workitems/edit/$(CWI.Id)">Bug</a> created. Please review it. '
+      condition: and(failed(), ne(variables['CWI.Id'], ''))
+
+  - job: SonarCloud
+    dependsOn: BuildAndTest
+    displayName: 'Sonar Scan'
+    pool:
+      vmImage: 'windows-latest'
+
+    variables:
+      AssignTo: 'Justin Wendlandt <juswen@microsoft.com>'
+      AZDOProjectName: 'Functions'
+      AZDOOrgName: 'ApiExampleProject-PR'
+
+    steps:
+      - task: SonarCloudPrepare@1
+        displayName: Prepare Build for Sonar
+        inputs:
+          SonarCloud: 'sonarcloud'
+          organization: 'e2e-microservices'
+          scannerMode: 'MSBuild'
+          projectKey: 'jwfunctions'
+          projectName: 'jwfunctions'
+          
+      - task: DotNetCoreCLI@2
+        displayName: Restore
+        inputs:
+          command: restore
+          projects: '**/*.csproj'
+
+      - task: DotNetCoreCLI@2
+        displayName: Build
+        inputs:
+          projects: '**/*.csproj'
+          arguments: '--configuration $(buildConfiguration)'
+
+      - task: SonarCloudAnalyze@1
+        displayName: Analyze via Sonar SonarCloud
+
+      - task: SonarCloudPublish@1
+        inputs:
+          pollingTimeoutSec: '300'
+
+      - task: CreateWorkItem@1
+        displayName: 'Create work item'
+        inputs:
+          teamProject: $(AZDOProjectName)
+          workItemType: Bug
+          title: 'SonarCloud Scan Failed: $(System.PullRequest.PullRequestId)'
+          assignedTo: '$(AssignTo)'
+          fieldMappings: 'System Info=SonarCloud Task failed. For more information please refer to this <a href="$(System.TeamFoundationCollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)">link</a>'
+          associate: true
+          linkPR: true
+          preventDuplicates: true
+          keyFields: System.Title
+          createOutputs: true
+          outputVariables: 'CWI.Id=System.Id'
+        condition: failed()
+
+      - task: CreatePRCommentTask@0
+        displayName: 'Create PR Comment'
+        inputs:
+          Comment: 'SonarCloud reports a <a href="https://dev.azure.com/$(AZDOOrgName)/$(AZDOProjectName)/_workitems/edit/$(CWI.Id)">Bug</a> created. Please review it. '
+        condition: and(failed(), ne(variables['CWI.Id'], ''))
+
+  - job: Publish
+    dependsOn: [BuildAndTest, CredScan, SonarCloud]
+    displayName: 'Publish'
+    pool:
+      vmImage: 'windows-latest'
+
+    steps:
+
+    - download: current
+      artifact: BuildFiles
+
+    - task: ArchiveFiles@2
+      displayName: "Archive app files"
+      inputs:
+        rootFolderOrFile: "$(Pipeline.Workspace)/BuildFiles/CustomerData/"
+        includeRootFolder: false
+        archiveFile: "$(System.ArtifactsDirectory)/ApiExampleProject.CustomerData.zip"
