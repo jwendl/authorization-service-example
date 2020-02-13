@@ -1,0 +1,15 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+  },
+  "TokenValidator": {
+    "Audience": "api://jw-example-api",
+    "TenantId": "1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378",
+    "ClientId": "62bb57bb-f748-4154-9b0d-804da6cccb4e"
+  },
+  "Database": {
+    "ConnectionString": ""
+  }
+}

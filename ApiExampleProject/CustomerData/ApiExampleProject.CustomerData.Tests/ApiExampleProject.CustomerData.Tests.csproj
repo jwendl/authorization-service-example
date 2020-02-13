@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisRuleSet>$(RepoDir)\Global.ruleset</CodeAnalysisRuleSet>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <ProjectGuid>{F600305C-034D-4FCE-A46B-3A53738BB52F}</ProjectGuid>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.10.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="Moq" Version="4.13.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(RepoDir)\Libraries\ApiExampleProject.Authentication\ApiExampleProject.Authentication.csproj" />
+    <ProjectReference Include="$(RepoDir)\CustomerData\ApiExampleProject.CustomerData.DataAccess\ApiExampleProject.CustomerData.DataAccess.csproj" />
+    <ProjectReference Include="$(RepoDir)\CustomerData\ApiExampleProject.CustomerData\ApiExampleProject.CustomerData.csproj" />
+    <ProjectReference Include="$(RepoDir)\Libraries\ApiExampleProject.Common\ApiExampleProject.Common.csproj" />
+  </ItemGroup>
+
+</Project>
