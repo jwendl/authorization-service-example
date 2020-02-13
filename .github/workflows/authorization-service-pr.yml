@@ -19,4 +19,4 @@ jobs:
     - name: Build with dotnet
       run: dotnet build ./ApiExampleProject/ApiExampleProject.sln --configuration Release
     - name: Test with dotnet
-      run: dotnet test ./ApiExampleProject/ApiExampleProject.sln --configuration Release
+      run: dotnet test ./ApiExampleProject/ApiExampleProject.sln --filter Category!=Integration --configuration Release
