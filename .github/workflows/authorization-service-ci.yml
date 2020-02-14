@@ -27,7 +27,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: build-output
-          path: ./BuildOutput
+          path: ./ApiExampleProject
 
   sonarCloud:
     runs-on: ubuntu-latest
