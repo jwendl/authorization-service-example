@@ -56,7 +56,12 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-        
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
+
       - name: Publish with dotnet
         run: dotnet publish --configuration $buildConfiguration --output ./output/AuthorizationService ./ApiExampleProject/Authorization/PolicyManager/PolicyManager.csproj
   
