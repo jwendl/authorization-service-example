@@ -1,0 +1,96 @@
+name: Authorization Service CI
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  buildConfiguration: release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
+
+      - name: Build with dotnet
+        run: dotnet build ./ApiExampleProject/ApiExampleProject.sln --configuration $buildConfiguration
+
+      - name: Test with dotnet
+        run: dotnet test ./ApiExampleProject/ApiExampleProject.sln --filter Category!=Integration --configuration $buildConfiguration
+
+  sonarCloud:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v1.1
+        env:
+          SONAR_TOKEN: ${{ secrets.SonarToken }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  credScan:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+
+      - name: gitCret
+        uses: CySeq/gitcret@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publishAuthorizationServiceApi:
+    runs-on: ubuntu-latest
+    needs: [ build, credScan, sonarCloud]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
+
+      - name: Publish with dotnet
+        run: dotnet publish --configuration $buildConfiguration --output ./output/PolicyManager ./ApiExampleProject/Authorization/PolicyManager/PolicyManager.csproj
+  
+      - name: Upload to Publish Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: policy-manager-publish
+          path: ./output/PolicyManager
+
+  publishCustomerDataServiceApi:
+    runs-on: ubuntu-latest
+    needs: [ build, credScan, sonarCloud]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
+
+      - name: Publish with dotnet
+        run: dotnet publish --configuration $buildConfiguration --output ./output/CustomerData ./ApiExampleProject/CustomerData/ApiExampleProject.CustomerData/ApiExampleProject.CustomerData.csproj
+  
+      - name: Upload to Publish Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: policy-manager-publish
+          path: ./output/CustomerData

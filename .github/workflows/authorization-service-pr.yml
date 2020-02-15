@@ -1,6 +1,9 @@
 name: Authorization Service PR  
 
-on: [push]
+on:
+  pull_request:
+    branches:
+      - master
 
 env:
   buildConfiguration: release
@@ -11,17 +14,17 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-        
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.101
 
       - name: Build with dotnet
-        run: dotnet build ./ApiExampleProject/ApiExampleProject.sln --configuration Release
+        run: dotnet build ./ApiExampleProject/ApiExampleProject.sln --configuration $buildConfiguration
 
       - name: Test with dotnet
-        run: dotnet test ./ApiExampleProject/ApiExampleProject.sln --filter Category!=Integration --configuration Release
+        run: dotnet test ./ApiExampleProject/ApiExampleProject.sln --filter Category!=Integration --configuration $buildConfiguration
 
   sonarCloud:
     runs-on: ubuntu-latest
