@@ -63,7 +63,7 @@ jobs:
           dotnet-version: 3.1.101
 
       - name: Publish with dotnet
-        run: dotnet publish --configuration $buildConfiguration --output ./output/PolicyManager ./build-output/Authorization/PolicyManager/PolicyManager.csproj
+        run: dotnet publish --configuration $buildConfiguration --output ./output/PolicyManager ./ApiExampleProject/Authorization/PolicyManager/PolicyManager.csproj
   
       - name: Upload to Publish Artifacts
         uses: actions/upload-artifact@v1
