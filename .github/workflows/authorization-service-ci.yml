@@ -1,6 +1,9 @@
 name: Authorization Service CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 env:
   buildConfiguration: release
