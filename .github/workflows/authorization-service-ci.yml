@@ -115,5 +115,5 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: order-data-publish
-          path: ./output/OrderData
+          path: ./output/OrderSystem
 
