@@ -109,7 +109,7 @@ jobs:
           dotnet-version: 3.1.101
 
       - name: Publish with dotnet
-        run: dotnet publish --configuration $buildConfiguration --output ./output/OrderData ./ApiExampleProject/OrderData/ApiExampleProject.OrderData/ApiExampleProject.OrderData.csproj
+        run: dotnet publish --configuration $buildConfiguration --output ./output/OrderSystem ./ApiExampleProject/OrderSystem/ApiExampleProject.OrderSystem/ApiExampleProject.OrderSystem.csproj
   
       - name: Upload to Publish Artifacts
         uses: actions/upload-artifact@v1
