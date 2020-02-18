@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - juswen/ci-pipeline*
 
 env:
   buildConfiguration: release
@@ -117,3 +116,45 @@ jobs:
           name: order-data-publish
           path: ./output/OrderSystem
 
+  deployTerraformScripts:
+    runs-on: ubuntu-latest
+    needs: [ publishAuthorizationServiceApi, publishCustomerDataServiceApi, publishOrderDataServiceApi ]
+    steps:
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Azure CLI Action
+        uses: Azure/cli@v1.0.0
+        with:
+          inlineScript: |
+            ./ApiExampleProject/Deployment/add-tf-storage.sh
+
+      - name: Terraform Apply for Azure
+        uses: ams0/terraform-apply-for-azure-action@v1
+        with:
+          terraform_version: 0.12.20
+          arm_client_id: ${{ secrets.ARM_CLIENT_ID }}
+          arm_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
+          arm_subscription_id: 959965bb-d9df-4c6f-825e-37e1090d817d
+          arm_tenant_id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+          arm_access_key: ${{ secrets.ARM_ACCESS_KEY }}
+          variables: # optional, default is 
+          # Path to Terraform directory, defaults to the working directory
+          path: ./ApiExampleProject/Deployment/
+
+  deployAuthorizationService:
+    runs-on: ubuntu-latest
+    needs: [ deployTerraformScripts ]
+    steps:
+      - name: Azure Functions Action
+        uses: Azure/functions-action@v1.1.3
+        with:
+          app-name: 
+          # Path to package or folder. *.zip or a folder to deploy
+          package: # optional, default is .
+          # Function app slot to be deploy to
+          slot-name: # optional
+          # Publish profile (*.publishsettings) file contents with web deploy secrets
+          publish-profile: # optional
