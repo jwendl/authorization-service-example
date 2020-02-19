@@ -4,8 +4,8 @@ resource "azurerm_resource_group" "policy_manager" {
 }
 
 resource "random_password" "sql_password" {
-  length = 64
-  special = true
+  length           = 64
+  special          = true
   override_special = "_%@"
 }
 
