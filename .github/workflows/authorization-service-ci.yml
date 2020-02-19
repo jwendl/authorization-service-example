@@ -183,6 +183,25 @@ jobs:
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
           ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+          TF_VAR_dashboard_resource_group_name: Dashboard
+          TF_VAR_dashboard_name: jwdashboard
+          TF_VAR_dashboard_location: westus2
+          TF_VAR_key_vault_app_registration_name: jwpolicymanager
+          TF_VAR_key_vault_resource_group_name: KeyVault
+          TF_VAR_key_vault_location: westus2
+          TF_VAR_key_vault_name: jwapikeyvault
+          TF_VAR_key_vault_tenant_id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+          TF_VAR_key_vault_object_id: 8f6370ec-e73b-4dd1-b7de-f7b1cd1644b9
+          TF_VAR_policy_manager_resource_group_name: PolicyManager
+          TF_VAR_policy_manager_location: westus2
+          TF_VAR_policy_manager_storage_account_name: jwpolicymanagerstorage
+          TF_VAR_policy_manager_functions_plan_name: jwpolicymanagerplan
+          TF_VAR_policy_manager_functions_name: jwpolicymanagerapi
+          TF_VAR_policy_manager_app_insights_name: jwpolicymanagerai
+          TF_VAR_policy_manager_sql_server_name: jwpolicymanagerdb
+          TF_VAR_policy_manager_sql_database_name: PolicyManager
+          TF_VAR_policy_manager_sql_tenant_id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+          TF_VAR_policy_manager_sql_object_id: 2609bcf7-475f-49c0-8040-85e667b4f3aa
 
   deployAuthorizationService:
     runs-on: ubuntu-latest
