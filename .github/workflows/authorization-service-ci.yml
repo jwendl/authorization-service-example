@@ -187,6 +187,8 @@ jobs:
           TF_VAR_dashboard_resource_group_name: Dashboard
           TF_VAR_dashboard_name: jwdashboard
           TF_VAR_dashboard_location: westus2
+          TF_VAR_app_client_id: ${{ secrets.APP_CLIENT_ID }}
+          TF_VAR_app_client_secret: ${{ secrets.APP_CLIENT_SECRET }}
           TF_VAR_key_vault_app_registration_name: jwpolicymanager
           TF_VAR_key_vault_resource_group_name: KeyVault
           TF_VAR_key_vault_location: westus2
