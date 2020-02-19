@@ -121,6 +121,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ publishAuthorizationServiceApi, publishCustomerDataServiceApi, publishOrderDataServiceApi ]
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
       - name: 'Terraform Format'
         uses: hashicorp/terraform-github-actions@master
         with:
