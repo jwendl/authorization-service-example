@@ -1,13 +1,13 @@
 provider "azurerm" {
-	version = "~> 1.41"
+  version = "~> 1.41"
 }
 
 provider "azuread" {
-	version = "~> 0.7"
+  version = "~> 0.7"
 }
 
 provider "random" {
-	version = "~> 2.2"
+  version = "~> 2.2"
 }
 
 terraform {

@@ -28,3 +28,7 @@ The goal is to allow for "Clone and F5" functionality. So everything here doesn'
   }
 }
 ```
+
+## Performance Testing
+
+Look at https://github.com/yorek/locust-on-azure

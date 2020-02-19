@@ -7,6 +7,6 @@ resource "azurerm_dashboard" "dashboard" {
   name                 = var.dashboard_name
   resource_group_name  = azurerm_resource_group.dashboard.name
   location             = var.dashboard_location
-  dashboard_properties = templatefile("dashboard.tpl", { })
+  dashboard_properties = templatefile("dashboard.tpl", {})
 }
 
