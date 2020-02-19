@@ -129,7 +129,7 @@ jobs:
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'fmt'
-          tf_actions_working_dir: 'deployment'
+          tf_actions_working_dir: 'deployment/cloud'
           tf_actions_comment: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -144,7 +144,7 @@ jobs:
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'init'
-          tf_actions_working_dir: 'deployment'
+          tf_actions_working_dir: 'deployment/cloud'
           tf_actions_comment: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -159,7 +159,7 @@ jobs:
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'validate'
-          tf_actions_working_dir: 'deployment'
+          tf_actions_working_dir: 'deployment/cloud'
           tf_actions_comment: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -174,7 +174,7 @@ jobs:
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'plan'
-          tf_actions_working_dir: 'deployment'
+          tf_actions_working_dir: 'deployment/cloud'
           tf_actions_comment: true
           args: '-out=plan.tfplan'
         env:
@@ -187,14 +187,7 @@ jobs:
           TF_VAR_dashboard_resource_group_name: Dashboard
           TF_VAR_dashboard_name: jwdashboard
           TF_VAR_dashboard_location: westus2
-          TF_VAR_app_client_id: ${{ secrets.APP_CLIENT_ID }}
-          TF_VAR_app_client_secret: ${{ secrets.APP_CLIENT_SECRET }}
-          TF_VAR_key_vault_app_registration_name: jwpolicymanager
-          TF_VAR_key_vault_resource_group_name: KeyVault
-          TF_VAR_key_vault_location: westus2
-          TF_VAR_key_vault_name: jwapikeyvault
-          TF_VAR_key_vault_tenant_id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-          TF_VAR_key_vault_object_id: 8f6370ec-e73b-4dd1-b7de-f7b1cd1644b9
+          TF_VAR_app_client_secret_key_vault_uri: "https://jwappkeyvault.vault.azure.net/secrets/app-client-secret/latest"
           TF_VAR_policy_manager_resource_group_name: PolicyManager
           TF_VAR_policy_manager_location: westus2
           TF_VAR_policy_manager_storage_account_name: jwpolicymanagerstorage
@@ -211,7 +204,7 @@ jobs:
         with:
           tf_actions_version: 0.12.20
           tf_actions_subcommand: 'apply'
-          tf_actions_working_dir: 'deployment'
+          tf_actions_working_dir: 'deployment/cloud'
           tf_actions_comment: true
           args: 'plan.tfplan'
         env:

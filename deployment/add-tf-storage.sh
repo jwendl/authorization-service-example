@@ -30,5 +30,8 @@ if [ $(az group exists --name $resourceGroupName) = false ]; then
     az storage account create --name $name --resource-group $resourceGroupName --location $location --sku Standard_LRS --kind StorageV2
 
     storageKey=$(az storage account keys list --resource-group $resourceGroupName --account-name $name --query "[0].value" --output tsv)
-    az storage container create --name terraform-state --account-name $name --account-key $storageKey
+    az storage container create --name terraform-cloud-state --account-name $name --account-key $storageKey
+
+    storageKey=$(az storage account keys list --resource-group $resourceGroupName --account-name $name --query "[0].value" --output tsv)
+    az storage container create --name terraform-personal-state --account-name $name --account-key $storageKey
 fi

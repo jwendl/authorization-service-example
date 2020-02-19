@@ -14,7 +14,7 @@ terraform {
   backend "azurerm" {
     resource_group_name  = "TerraformBackend"
     storage_account_name = "jwtfbackend"
-    container_name       = "terraform-state"
+    container_name       = "terraform-cloud-state"
     key                  = "prod.terraform.tfstate"
   }
 }

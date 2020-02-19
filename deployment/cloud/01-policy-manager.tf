@@ -41,7 +41,7 @@ resource "azurerm_function_app" "policy_manager" {
     FUNCTIONS_WORKER_RUNTIME                 = "dotnet"
     WEBSITE_CONTENTAZUREFILECONNECTIONSTRING = azurerm_storage_account.policy_manager.primary_connection_string
     WEBSITE_CONTENTSHARE                     = azurerm_storage_account.policy_manager.name
-    TokenCreator__ClientSecret               = azuread_application_password.app_registration.value
+    TokenCreator__ClientSecret               = format("@Microsoft.KeyVault(SecretUri=%s)", var.app_client_secret_key_vault_uri)
   }
 }
 

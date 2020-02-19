@@ -12,25 +12,20 @@ resource "azurerm_key_vault" "key_vault" {
 
   sku_name = "standard"
 
-  access_policy {
-    tenant_id = var.key_vault_tenant_id
-    object_id = var.key_vault_object_id
-
-    key_permissions = [
-      "get",
-    ]
-
-    secret_permissions = [
-      "get",
-    ]
-
-    storage_permissions = [
-      "get",
-    ]
-  }
-
   network_acls {
     default_action = "Deny"
+    ip_rules       = ["24.19.163.204"]
     bypass         = "AzureServices"
   }
+}
+
+resource "azurerm_key_vault_access_policy" "key_vault_ap1" {
+  key_vault_id = azurerm_key_vault.key_vault.id
+
+  tenant_id = var.terraform_tenant_id
+  object_id = var.terraform_object_id
+
+  secret_permissions = [
+    "backup", "get", "list", "set",
+  ]
 }

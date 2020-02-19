@@ -10,28 +10,8 @@ variable "dashboard_location" {
   description = "The dashboard location"
 }
 
-variable "key_vault_app_registration_name" {
-  description = "The key vault app registration name"
-}
-
-variable "key_vault_resource_group_name" {
-  description = "The key vault resource group"
-}
-
-variable "key_vault_location" {
-  description = "The key vault location"
-}
-
-variable "key_vault_name" {
-  description = "The key vault name"
-}
-
-variable "key_vault_tenant_id" {
-  description = "The key vault tenant id"
-}
-
-variable "key_vault_object_id" {
-  description = "The key vault object id"
+variable "app_client_secret_key_vault_uri" {
+  description = "The reference to the client app secret"
 }
 
 variable "policy_manager_resource_group_name" {
