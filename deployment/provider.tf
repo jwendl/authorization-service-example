@@ -12,8 +12,8 @@ provider "random" {
 
 terraform {
   backend "azurerm" {
-    resource_group_name  = "Storage"
-    storage_account_name = "jwtfstorage"
+    resource_group_name  = "TerraformBackend"
+    storage_account_name = "jwtfbackend"
     container_name       = "terraform-state"
     key                  = "prod.terraform.tfstate"
   }
