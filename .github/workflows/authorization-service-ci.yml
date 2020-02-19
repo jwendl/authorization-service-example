@@ -237,3 +237,4 @@ jobs:
           app-name: jwpolicymanager
           package: ./policy-manager.zip
           slot-name: Staging
+          creds: ${{ secrets.PIPELINE_CREDS }}
