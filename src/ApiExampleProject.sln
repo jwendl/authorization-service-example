@@ -16,8 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
-		ApiExampleProject-CI.yaml = ApiExampleProject-CI.yaml
-		ApiExampleProject-PR.yaml = ApiExampleProject-PR.yaml
 		Directory.Build.props = Directory.Build.props
 		global.json = global.json
 		Global.ruleset = Global.ruleset
@@ -59,21 +57,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolicyManager", "Authorization\PolicyManager\PolicyManager.csproj", "{0AEC9942-2BAF-4463-93B2-48EF911017E6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolicyManager.DataAccess.Tests", "Authorization\PolicyManager.DataAccess.Tests\PolicyManager.DataAccess.Tests.csproj", "{4CAFA85B-9DB3-4107-9621-626E1EA07886}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{FBE805DD-CA77-4154-87BA-6C20D070F23D}"
-	ProjectSection(SolutionItems) = preProject
-		Deployment\01-app-registration.tf = Deployment\01-app-registration.tf
-		Deployment\02-key-vault.tf = Deployment\02-key-vault.tf
-		Deployment\03-policy-manager.tf = Deployment\03-policy-manager.tf
-		Deployment\05-dashboard.tf = Deployment\05-dashboard.tf
-		Deployment\add-tf-storage.sh = Deployment\add-tf-storage.sh
-		Deployment\dashboard.tpl = Deployment\dashboard.tpl
-		Deployment\provider.tf = Deployment\provider.tf
-		Deployment\README.md = Deployment\README.md
-		Deployment\run-terraform.sh = Deployment\run-terraform.sh
-		Deployment\variables.tf = Deployment\variables.tf
-		Deployment\versions.tf = Deployment\versions.tf
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

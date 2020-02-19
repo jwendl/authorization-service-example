@@ -18,15 +18,6 @@ resource "azuread_application" "app_registration" {
   oauth2_allow_implicit_flow = true
   type                       = "webapp/api"
 
-  required_resource_access {
-    resource_app_id = "00000003-0000-0000-c000-000000000000"
-
-    resource_access {
-      id   = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
-      type = "Scope"
-    }
-  }
-
   app_role {
     allowed_member_types = [
       "User",
