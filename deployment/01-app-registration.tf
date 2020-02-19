@@ -4,8 +4,8 @@ resource "azurerm_resource_group" "app_registration" {
 }
 
 resource "random_password" "app_password" {
-  length = 64
-  special = true
+  length           = 64
+  special          = true
   override_special = "_%@"
 }
 
@@ -42,6 +42,6 @@ resource "azuread_application" "app_registration" {
 
 resource "azuread_application_password" "app_registration" {
   application_object_id = azuread_application.app_registration.id
-  value          = random_password.app_password.result
-  end_date       = timeadd(timestamp(), "8760h")
+  value                 = random_password.app_password.result
+  end_date              = timeadd(timestamp(), "8760h")
 }
