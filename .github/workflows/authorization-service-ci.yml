@@ -194,3 +194,4 @@ jobs:
           app-name: jwpolicymanager
           package: ./policy-manager-publish.zip
           slot-name: Staging
+
