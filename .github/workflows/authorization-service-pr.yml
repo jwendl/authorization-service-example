@@ -21,10 +21,10 @@ jobs:
           dotnet-version: 3.1.101
 
       - name: Build with dotnet
-        run: dotnet build ./ApiExampleProject/ApiExampleProject.sln --configuration $buildConfiguration
+        run: dotnet build ./src/ApiExampleProject.sln --configuration $buildConfiguration
 
       - name: Test with dotnet
-        run: dotnet test ./ApiExampleProject/ApiExampleProject.sln --filter Category!=Integration --configuration $buildConfiguration
+        run: dotnet test ./src/ApiExampleProject.sln --filter Category!=Integration --configuration $buildConfiguration
 
   sonarCloud:
     runs-on: ubuntu-latest
