@@ -62,14 +62,6 @@ variable "policy_manager_sql_server_name" {
   description = "The policy manager sql server name"
 }
 
-variable "policy_manager_sql_admin_login" {
-  description = "The policy manager sql admin login"
-}
-
-variable "policy_manager_sql_admin_password" {
-  description = "The policy manager sql admin password"
-}
-
 variable "policy_manager_sql_database_name" {
   description = "The policy manager sql admin password"
 }
