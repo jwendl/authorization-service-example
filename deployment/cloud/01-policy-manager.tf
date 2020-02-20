@@ -35,9 +35,10 @@ resource "azurerm_function_app" "policy_manager" {
   resource_group_name       = azurerm_resource_group.policy_manager.name
   app_service_plan_id       = azurerm_app_service_plan.policy_manager.id
   storage_connection_string = azurerm_storage_account.policy_manager.primary_connection_string
+  version                   = "~3"
   app_settings = {
     APPINSIGHTS_INSTRUMENTATIONKEY           = azurerm_application_insights.policy_manager.instrumentation_key
-    FUNCTIONS_EXTENSION_VERSION              = "~2"
+    FUNCTIONS_EXTENSION_VERSION              = "~3"
     FUNCTIONS_WORKER_RUNTIME                 = "dotnet"
     WEBSITE_CONTENTAZUREFILECONNECTIONSTRING = azurerm_storage_account.policy_manager.primary_connection_string
     WEBSITE_CONTENTSHARE                     = azurerm_storage_account.policy_manager.name
