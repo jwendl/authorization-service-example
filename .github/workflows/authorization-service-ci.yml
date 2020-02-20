@@ -225,11 +225,10 @@ jobs:
         with:
           name: policy-manager-publish
           
-      - name: Zip Release
-        uses: TheDoctor0/zip-release@v0.2.1
+      - name: Zip Deployment
+        uses: montudor/action-zip@v0.1.0
         with:
-          filename: policy-manager.zip
-          path: ./policy-manager-publish/*
+          args: zip -qq -r ./policy-manager.zip ./policy-manager-publish
 
       - name: Azure CLI Login
         uses: azure/login@v1
@@ -239,7 +238,7 @@ jobs:
       - name: Upload to Publish Artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: policy-manager-publish
+          name: policy-manager
           path: ./policy-manager.zip
 
       - name: Create Staging Slot
