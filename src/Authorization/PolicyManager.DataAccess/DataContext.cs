@@ -46,6 +46,8 @@ namespace PolicyManager.DataAccess
                 var accessToken = await azureServiceTokenProviderWrapper.GetAccessTokenAsync("https://database.windows.net/");
 
                 var sqlConnection = base.Database.GetDbConnection() as SqlConnection;
+                _ = sqlConnection ?? throw new NullReferenceException(nameof(sqlConnection));
+
                 sqlConnection.AccessToken = accessToken;
             }
             else

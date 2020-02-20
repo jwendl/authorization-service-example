@@ -23,12 +23,6 @@ namespace PolicyManager.DataAccess.Repositories
         {
             _ = authenticationHeaderValue ?? throw new ArgumentNullException(nameof(authenticationHeaderValue));
 
-            var scopes = new List<string>()
-            {
-                "https://graph.microsoft.com/User.Read",
-                "https://graph.microsoft.com/Group.Read.All",
-            };
-
             var delegateAuthenticationProvider = new DelegateAuthenticationProvider(
                 async (requestMessage) =>
                 {
@@ -49,21 +43,27 @@ namespace PolicyManager.DataAccess.Repositories
                 if (directoryObject is Group)
                 {
                     var group = directoryObject as Group;
-                    graphGroups.Add(new Group()
+                    if (group != null)
                     {
-                        Id = group.Id,
-                        DisplayName = group.DisplayName,
-                    });
+                        graphGroups.Add(new Group()
+                        {
+                            Id = group.Id,
+                            DisplayName = group.DisplayName,
+                        });
+                    }
                 }
 
                 if (directoryObject is DirectoryRole)
                 {
                     var directoryRole = directoryObject as DirectoryRole;
-                    graphGroups.Add(new Group()
+                    if (directoryRole != null)
                     {
-                        Id = directoryRole.Id,
-                        DisplayName = directoryRole.DisplayName,
-                    });
+                        graphGroups.Add(new Group()
+                        {
+                            Id = directoryRole.Id,
+                            DisplayName = directoryRole.DisplayName,
+                        });
+                    }
                 }
             }
 

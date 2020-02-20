@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using ApiExampleProject.CustomerData.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +13,6 @@ namespace ApiExampleProject.CustomerData.DataAccess.Interfaces
         ValueTask<EntityEntry<TEntity>> AddAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default)
             where TEntity : class;
 
-        [SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "Not valid as we are providing an interface on top of the abstract class.")]
         DbSet<TEntity> Set<TEntity>()
             where TEntity : class;
 

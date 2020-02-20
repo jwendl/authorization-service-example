@@ -37,7 +37,8 @@ namespace PolicyManager.DataAccess.Repositories
 
         public async Task<IEnumerable<T>> ReadAllAsync(params Expression<Func<T, bool>>[] includes)
         {
-            var query = dataContext.Set<T>() as IIncludableQueryable<T, bool>;
+            if (!(dataContext.Set<T>() is IIncludableQueryable<T, bool> query)) return new List<T>();
+
             foreach (var include in includes)
             {
                 query = query
