@@ -8,7 +8,7 @@ on:
 
 env:
   buildConfiguration: release
-  pipelineVersion: 0.3
+  pipelineVersion: 0.4
 
 jobs:
   build:
