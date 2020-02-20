@@ -229,7 +229,7 @@ jobs:
         uses: TheDoctor0/zip-release@v0.2.1
         with:
           filename: policy-manager.zip
-          path: ./policy-manager-publish
+          path: ./policy-manager-publish/*
 
       - name: Azure CLI Login
         uses: azure/login@v1
@@ -241,12 +241,6 @@ jobs:
         with:
           inlineScript: |
             az functionapp deployment slot create --resource-group PolicyManager --name jwpolicymanagerapi --slot Staging 
-
-      - name: Upload to Publish Artifacts
-        uses: actions/upload-artifact@v1
-        with:
-          name: policy-manager-zip
-          path: ./policy-manager.zip
 
       - name: Azure Functions Action
         uses: Azure/functions-action@v1.1.3
