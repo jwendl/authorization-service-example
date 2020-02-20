@@ -38,11 +38,15 @@ resource "azurerm_function_app" "policy_manager" {
   version                   = "~3"
   app_settings = {
     APPINSIGHTS_INSTRUMENTATIONKEY           = azurerm_application_insights.policy_manager.instrumentation_key
-    FUNCTIONS_EXTENSION_VERSION              = "~3"
     FUNCTIONS_WORKER_RUNTIME                 = "dotnet"
-    WEBSITE_CONTENTAZUREFILECONNECTIONSTRING = azurerm_storage_account.policy_manager.primary_connection_string
-    WEBSITE_CONTENTSHARE                     = azurerm_storage_account.policy_manager.name
     TokenCreator__ClientSecret               = format("@Microsoft.KeyVault(SecretUri=%s)", var.app_client_secret_key_vault_uri)
+    WEBSITE_RUN_FROM_PACKAGE = "1"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      app_settings["WEBSITE_RUN_FROM_PACKAGE"]
+    ]
   }
 }
 
