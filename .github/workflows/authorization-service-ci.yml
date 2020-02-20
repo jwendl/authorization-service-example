@@ -188,7 +188,7 @@ jobs:
           TF_VAR_dashboard_resource_group_name: Dashboard
           TF_VAR_dashboard_name: jwdashboard
           TF_VAR_dashboard_location: westus2
-          TF_VAR_app_client_secret_key_vault_uri: "https://jwappkeyvault.vault.azure.net/secrets/app-client-secret/latest"
+          TF_VAR_app_client_secret_key_vault_uri: "https://jwappkeyvault.vault.azure.net/secrets/app-client-secret/"
           TF_VAR_policy_manager_resource_group_name: PolicyManager
           TF_VAR_policy_manager_location: westus2
           TF_VAR_policy_manager_storage_account_name: jwpolicymanagerstorage
@@ -241,6 +241,12 @@ jobs:
         with:
           inlineScript: |
             az functionapp deployment slot create --resource-group PolicyManager --name jwpolicymanagerapi --slot Staging 
+
+      - name: Upload to Publish Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: policy-manager-zip
+          path: ./policy-manager.zip
 
       - name: Azure Functions Action
         uses: Azure/functions-action@v1.1.3
