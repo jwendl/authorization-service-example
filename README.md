@@ -1,7 +1,6 @@
 # Authorization Service End to End Example
 
 ![Authorization Service PR](https://github.com/jwendl/authorization-service-example/workflows/Authorization%20Service%20PR/badge.svg?branch=master) [![Total alerts](https://img.shields.io/lgtm/alerts/g/jwendl/authorization-service-example.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/jwendl/authorization-service-example/alerts/)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/jwendl/authorization-service-example.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/jwendl/authorization-service-example/alerts/)
 
 ## Introduction 
 
