@@ -236,6 +236,12 @@ jobs:
         with:
           creds: ${{ secrets.PIPELINE_CREDS }}
 
+      - name: Upload to Publish Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: policy-manager-publish
+          path: ./policy-manager
+
       - name: Create Staging Slot
         uses: Azure/cli@v1.0.0
         with:
