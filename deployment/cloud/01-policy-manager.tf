@@ -37,10 +37,10 @@ resource "azurerm_function_app" "policy_manager" {
   storage_connection_string = azurerm_storage_account.policy_manager.primary_connection_string
   version                   = "~3"
   app_settings = {
-    APPINSIGHTS_INSTRUMENTATIONKEY           = azurerm_application_insights.policy_manager.instrumentation_key
-    FUNCTIONS_WORKER_RUNTIME                 = "dotnet"
-    TokenCreator__ClientSecret               = format("@Microsoft.KeyVault(SecretUri=%s)", var.app_client_secret_key_vault_uri)
-    WEBSITE_RUN_FROM_PACKAGE = "1"
+    APPINSIGHTS_INSTRUMENTATIONKEY = azurerm_application_insights.policy_manager.instrumentation_key
+    FUNCTIONS_WORKER_RUNTIME       = "dotnet"
+    TokenCreator__ClientSecret     = format("@Microsoft.KeyVault(SecretUri=%s)", var.app_client_secret_key_vault_uri)
+    WEBSITE_RUN_FROM_PACKAGE       = "1"
   }
 
   lifecycle {
