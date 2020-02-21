@@ -7,6 +7,7 @@ on:
 
 env:
   buildConfiguration: release
+  pipelineVersion: 0.5
 
 jobs:
   build:
@@ -21,10 +22,24 @@ jobs:
           dotnet-version: 3.1.101
 
       - name: Build with dotnet
-        run: dotnet build ./ApiExampleProject/ApiExampleProject.sln --configuration $buildConfiguration
+        run: dotnet build ./src/ApiExampleProject.sln --configuration $buildConfiguration
 
       - name: Test with dotnet
-        run: dotnet test ./ApiExampleProject/ApiExampleProject.sln --filter Category!=Integration --configuration $buildConfiguration
+        run: dotnet test ./src/ApiExampleProject.sln --filter Category!=Integration --configuration $buildConfiguration
+
+  sonarCloud:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: SonarCloud Scan
+        # remove when https://github.com/SonarSource/sonarcloud-github-action/pull/6 is merged uses: SonarSource/sonarcloud-github-action@v1.1
+        uses: hakimio/sonarcloud-github-action@pr-fix
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   credScan:
     runs-on: ubuntu-latest
@@ -42,7 +57,7 @@ jobs:
 
   publishAuthorizationServiceApi:
     runs-on: ubuntu-latest
-    needs: [ build, credScan, sonarCloud]
+    needs: [ build, credScan ]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -53,7 +68,7 @@ jobs:
           dotnet-version: 3.1.101
 
       - name: Publish with dotnet
-        run: dotnet publish --configuration $buildConfiguration --output ./output/PolicyManager ./ApiExampleProject/Authorization/PolicyManager/PolicyManager.csproj
+        run: dotnet publish --configuration $buildConfiguration --output ./output/PolicyManager ./src/Authorization/PolicyManager/PolicyManager.csproj
   
       - name: Upload to Publish Artifacts
         uses: actions/upload-artifact@v1
@@ -63,7 +78,7 @@ jobs:
 
   publishCustomerDataServiceApi:
     runs-on: ubuntu-latest
-    needs: [ build, credScan, sonarCloud]
+    needs: [ build, credScan ]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -74,10 +89,155 @@ jobs:
           dotnet-version: 3.1.101
 
       - name: Publish with dotnet
-        run: dotnet publish --configuration $buildConfiguration --output ./output/CustomerData ./ApiExampleProject/CustomerData/ApiExampleProject.CustomerData/ApiExampleProject.CustomerData.csproj
+        run: dotnet publish --configuration $buildConfiguration --output ./output/CustomerData ./src/CustomerData/ApiExampleProject.CustomerData/ApiExampleProject.CustomerData.csproj
   
       - name: Upload to Publish Artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: policy-manager-publish
+          name: customer-data-publish
           path: ./output/CustomerData
+
+  publishOrderDataServiceApi:
+    runs-on: ubuntu-latest
+    needs: [ build, credScan ]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
+
+      - name: Publish with dotnet
+        run: dotnet publish --configuration $buildConfiguration --output ./output/OrderSystem ./src/OrderSystem/ApiExampleProject.OrderSystem/ApiExampleProject.OrderSystem.csproj
+  
+      - name: Upload to Publish Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: order-data-publish
+          path: ./output/OrderSystem
+
+  deployTerraformScripts:
+    runs-on: ubuntu-latest
+    needs: [ publishAuthorizationServiceApi, publishCustomerDataServiceApi, publishOrderDataServiceApi ]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: 'Terraform Format'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'fmt'
+          tf_actions_working_dir: 'deployment/cloud'
+          tf_actions_comment: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARM_SUBSCRIPTION_ID: 959965bb-d9df-4c6f-825e-37e1090d817d
+          ARM_TENANT_ID: 72f988bf-86f1-41af-91ab-2d7cd011db47
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+
+      - name: 'Terraform Init'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: 'deployment/cloud'
+          tf_actions_comment: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARM_SUBSCRIPTION_ID: 959965bb-d9df-4c6f-825e-37e1090d817d
+          ARM_TENANT_ID: 72f988bf-86f1-41af-91ab-2d7cd011db47
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+
+      - name: 'Terraform Validate'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'validate'
+          tf_actions_working_dir: 'deployment/cloud'
+          tf_actions_comment: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARM_SUBSCRIPTION_ID: 959965bb-d9df-4c6f-825e-37e1090d817d
+          ARM_TENANT_ID: 72f988bf-86f1-41af-91ab-2d7cd011db47
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+
+      - name: 'Terraform Plan'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'plan'
+          tf_actions_working_dir: 'deployment/cloud'
+          tf_actions_comment: true
+          args: '-out=plan.tfplan'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARM_SUBSCRIPTION_ID: 959965bb-d9df-4c6f-825e-37e1090d817d
+          ARM_TENANT_ID: 72f988bf-86f1-41af-91ab-2d7cd011db47
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+          TF_VAR_dashboard_resource_group_name: Dashboard
+          TF_VAR_dashboard_name: jwdashboard
+          TF_VAR_dashboard_location: westus2
+          TF_VAR_app_client_secret_key_vault_uri: "https://jwappkeyvault.vault.azure.net/secrets/app-client-secret/"
+          TF_VAR_policy_manager_resource_group_name: PolicyManager
+          TF_VAR_policy_manager_location: westus2
+          TF_VAR_policy_manager_storage_account_name: jwpolicymanagerstorage
+          TF_VAR_policy_manager_functions_plan_name: jwpolicymanagerplan
+          TF_VAR_policy_manager_functions_name: jwpolicymanagerapi
+          TF_VAR_policy_manager_app_insights_name: jwpolicymanagerai
+          TF_VAR_policy_manager_sql_server_name: jwpolicymanagerdb
+          TF_VAR_policy_manager_sql_database_name: PolicyManager
+          TF_VAR_policy_manager_sql_tenant_id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+          TF_VAR_policy_manager_sql_object_id: 2609bcf7-475f-49c0-8040-85e667b4f3aa
+
+      - name: 'Terraform Apply'
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'apply'
+          tf_actions_working_dir: 'deployment/cloud'
+          tf_actions_comment: true
+          args: 'plan.tfplan'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARM_SUBSCRIPTION_ID: 959965bb-d9df-4c6f-825e-37e1090d817d
+          ARM_TENANT_ID: 72f988bf-86f1-41af-91ab-2d7cd011db47
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+
+  deployAuthorizationService:
+    runs-on: ubuntu-latest
+    needs: [ deployTerraformScripts ]
+    steps:
+      - name: Download Publish Artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: policy-manager-publish
+          
+      - name: Create Deployment Archive
+        run: |
+          pushd ./policy-manager-publish/
+          zip -r ../policy-manager.zip ./*
+          popd
+
+      - name: Azure CLI Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.PIPELINE_CREDS }}
+
+      - name: Azure Functions Action
+        uses: Azure/functions-action@v1.1.3
+        with:
+          app-name: jwpolicymanagerapi
+          package: ./policy-manager.zip
