@@ -228,7 +228,7 @@ jobs:
       - name: Create Deployment Archive
         run: |
           pushd ./policy-manager-publish/
-          zip -r ./policy-manager.zip ./*
+          zip -r ../policy-manager.zip ./*
           popd
 
       - name: Azure CLI Login
