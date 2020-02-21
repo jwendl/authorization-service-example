@@ -21,10 +21,10 @@ jobs:
           dotnet-version: 3.1.101
 
       - name: Build with dotnet
-        run: dotnet build ./ApiExampleProject/ApiExampleProject.sln --configuration $buildConfiguration
+        run: dotnet build ./src/ApiExampleProject.sln --configuration $buildConfiguration
 
       - name: Test with dotnet
-        run: dotnet test ./ApiExampleProject/ApiExampleProject.sln --filter Category!=Integration --configuration $buildConfiguration
+        run: dotnet test ./src/ApiExampleProject.sln --filter Category!=Integration --configuration $buildConfiguration
 
   sonarCloud:
     runs-on: ubuntu-latest
@@ -32,9 +32,10 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-
+        
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1.1
+        # remove when https://github.com/SonarSource/sonarcloud-github-action/pull/6 is merged uses: SonarSource/sonarcloud-github-action@v1.1
+        uses: hakimio/sonarcloud-github-action@pr-fix
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
