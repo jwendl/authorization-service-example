@@ -34,7 +34,8 @@ jobs:
         uses: actions/checkout@v2
         
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1.1
+        # remove when https://github.com/SonarSource/sonarcloud-github-action/pull/6 is merged uses: SonarSource/sonarcloud-github-action@v1.1
+        uses: hakimio/sonarcloud-github-action@pr-fix
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
