@@ -27,19 +27,6 @@ jobs:
       - name: Test with dotnet
         run: dotnet test ./src/ApiExampleProject.sln --filter Category!=Integration --configuration $buildConfiguration
 
-  sonarCloud:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-        
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1.1
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   credScan:
     runs-on: ubuntu-latest
     needs: build
