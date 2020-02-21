@@ -225,10 +225,11 @@ jobs:
         with:
           name: policy-manager-publish
           
-      - name: Zip Deployment
-        uses: montudor/action-zip@v0.1.0
-        with:
-          args: cd ./policy-manager-publish/; zip -qq -r ./policy-manager.zip ./*
+      - name: Create Deployment Archive
+        run: |
+          pushd ./policy-manager-publish/
+          zip -qq -r ./policy-manager.zip ./*
+          popd
 
       - name: Azure CLI Login
         uses: azure/login@v1
