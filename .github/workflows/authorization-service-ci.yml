@@ -246,7 +246,7 @@ jobs:
         uses: Azure/cli@v1.0.0
         with:
           inlineScript: |
-            az functionapp deployment slot create --resource-group PolicyManager --name jwpolicymanagerapi --slot Staging 
+            az functionapp deployment slot create --configuration-source jwpolicymanagerapi --resource-group PolicyManager --name jwpolicymanagerapi --slot Staging 
 
       - name: Azure Functions Action
         uses: Azure/functions-action@v1.1.3
