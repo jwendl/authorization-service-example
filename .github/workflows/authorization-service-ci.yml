@@ -8,7 +8,7 @@ on:
 
 env:
   buildConfiguration: release
-  pipelineVersion: 0.3
+  pipelineVersion: 0.5
 
 jobs:
   build:
@@ -225,32 +225,19 @@ jobs:
         with:
           name: policy-manager-publish
           
-      - name: Zip Release
-        uses: TheDoctor0/zip-release@v0.2.1
-        with:
-          filename: policy-manager.zip
-          path: ./policy-manager-publish
+      - name: Create Deployment Archive
+        run: |
+          pushd ./policy-manager-publish/
+          zip -r ../policy-manager.zip ./*
+          popd
 
       - name: Azure CLI Login
         uses: azure/login@v1
         with:
           creds: ${{ secrets.PIPELINE_CREDS }}
 
-      - name: Create Staging Slot
-        uses: Azure/cli@v1.0.0
-        with:
-          inlineScript: |
-            az functionapp deployment slot create --resource-group PolicyManager --name jwpolicymanagerapi --slot Staging 
-
-      - name: Upload to Publish Artifacts
-        uses: actions/upload-artifact@v1
-        with:
-          name: policy-manager-zip
-          path: ./policy-manager.zip
-
       - name: Azure Functions Action
         uses: Azure/functions-action@v1.1.3
         with:
           app-name: jwpolicymanagerapi
           package: ./policy-manager.zip
-          slot-name: Staging
