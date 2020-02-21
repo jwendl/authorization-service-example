@@ -227,7 +227,7 @@ jobs:
           
       - name: Create Deployment Archive
         run: |
-          apt-get install zip
+          sudo apt-get install zip
           pushd ./policy-manager-publish/
           zip -qq -r ./policy-manager.zip ./*
           popd
