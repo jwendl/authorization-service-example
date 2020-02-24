@@ -53,3 +53,43 @@ variable "policy_manager_sql_tenant_id" {
 variable "policy_manager_sql_object_id" {
   description = "The object id of the admin for sql server"
 }
+
+variable "customer_data_resource_group_name" {
+  description = "The customer data resource group"
+}
+
+variable "customer_data_location" {
+  description = "The customer data location"
+}
+
+variable "customer_data_storage_account_name" {
+  description = "The customer data storage account name"
+}
+
+variable "customer_data_functions_plan_name" {
+  description = "The customer data service app plan name"
+}
+
+variable "customer_data_functions_name" {
+  description = "The customer data functions app name"
+}
+
+variable "customer_data_app_insights_name" {
+  description = "The customer data app insights name"
+}
+
+variable "customer_data_sql_server_name" {
+  description = "The customer data sql server name"
+}
+
+variable "customer_data_sql_database_name" {
+  description = "The customer data sql admin password"
+}
+
+variable "customer_data_sql_tenant_id" {
+  description = "The customer data of the admin for sql server"
+}
+
+variable "customer_data_sql_object_id" {
+  description = "The object id of the admin for sql server"
+}

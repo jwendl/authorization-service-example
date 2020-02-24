@@ -8,14 +8,6 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <ProjectGuid>{0AEC9942-2BAF-4463-93B2-48EF911017E6}</ProjectGuid>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="CrudFunctionsTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>CrudFunctionsTemplate.tt</DependentUpon>
-    </None>
-  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.0.0" />

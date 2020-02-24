@@ -20,6 +20,16 @@ export TF_VAR_policy_manager_sql_server_name="jwpolicymanagerdb"
 export TF_VAR_policy_manager_sql_database_name="PolicyManager"
 export TF_VAR_policy_manager_sql_tenant_id="72f988bf-86f1-41af-91ab-2d7cd011db47"
 export TF_VAR_policy_manager_sql_object_id="2609bcf7-475f-49c0-8040-85e667b4f3aa"
+export TF_VAR_customer_data_resource_group_name="CustomerData"
+export TF_VAR_customer_data_location="westus2"
+export TF_VAR_customer_data_storage_account_name="jwcustomerdatastorage"
+export TF_VAR_customer_data_functions_plan_name="jwcustomerdataplan"
+export TF_VAR_customer_data_functions_name="jwcustomerdataapi"
+export TF_VAR_customer_data_app_insights_name="jwcustomerdataai"
+export TF_VAR_customer_data_sql_server_name="jwcustomerdatadb"
+export TF_VAR_customer_data_sql_database_name="CustomerData"
+export TF_VAR_customer_data_sql_tenant_id="72f988bf-86f1-41af-91ab-2d7cd011db47"
+export TF_VAR_customer_data_sql_object_id="2609bcf7-475f-49c0-8040-85e667b4f3aa"
 
 mkdir -p ~/tfoutput
 terraform init

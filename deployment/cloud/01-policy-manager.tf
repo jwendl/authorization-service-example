@@ -3,7 +3,7 @@ resource "azurerm_resource_group" "policy_manager" {
   location = var.policy_manager_location
 }
 
-resource "random_password" "sql_password" {
+resource "random_password" "policy_manager_sql_password" {
   length           = 64
   special          = true
   override_special = "_%@"
@@ -63,7 +63,7 @@ resource "azurerm_sql_server" "policy_manager" {
   location                     = azurerm_resource_group.policy_manager.location
   version                      = "12.0"
   administrator_login          = "jwendl"
-  administrator_login_password = random_password.sql_password.result
+  administrator_login_password = random_password.policy_manager_sql_password.result
 }
 
 resource "azurerm_sql_database" "policy_manager" {
@@ -81,10 +81,10 @@ resource "azurerm_sql_active_directory_administrator" "policy_manager" {
   object_id           = var.policy_manager_sql_object_id
 }
 
-output "instrumentation_key" {
+output "policy_manager_instrumentation_key" {
   value = "${azurerm_application_insights.policy_manager.instrumentation_key}"
 }
 
-output "app_id" {
+output "policy_manager_app_id" {
   value = "${azurerm_application_insights.policy_manager.app_id}"
 }

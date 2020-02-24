@@ -117,7 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-
   <data name="CreateThingEndLog" xml:space="preserve">
     <value>Ended execution of CreateThingAttribute function</value>
   </data>
@@ -148,7 +147,6 @@
   <data name="DeleteThingStartLog" xml:space="preserve">
     <value>Started execution of DeleteThing function</value>
   </data>
-
   <data name="CreateThingAttributeEndLog" xml:space="preserve">
     <value>Ended execution of CreateThingAttributeAttribute function</value>
   </data>
@@ -179,7 +177,6 @@
   <data name="DeleteThingAttributeStartLog" xml:space="preserve">
     <value>Started execution of DeleteThingAttribute function</value>
   </data>
-
   <data name="CreateThingPolicyEndLog" xml:space="preserve">
     <value>Ended execution of CreateThingPolicyAttribute function</value>
   </data>
@@ -210,7 +207,6 @@
   <data name="DeleteThingPolicyStartLog" xml:space="preserve">
     <value>Started execution of DeleteThingPolicy function</value>
   </data>
-
   <data name="CreateUserEndLog" xml:space="preserve">
     <value>Ended execution of CreateUserAttribute function</value>
   </data>
@@ -241,7 +237,6 @@
   <data name="DeleteUserStartLog" xml:space="preserve">
     <value>Started execution of DeleteUser function</value>
   </data>
-
   <data name="CreateUserAttributeEndLog" xml:space="preserve">
     <value>Ended execution of CreateUserAttributeAttribute function</value>
   </data>
@@ -272,5 +267,4 @@
   <data name="DeleteUserAttributeStartLog" xml:space="preserve">
     <value>Started execution of DeleteUserAttribute function</value>
   </data>
-
 </root>
