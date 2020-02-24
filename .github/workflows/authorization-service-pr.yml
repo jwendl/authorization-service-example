@@ -130,3 +130,14 @@ jobs:
           TF_VAR_customer_data_sql_database_name: CustomerData
           TF_VAR_customer_data_sql_tenant_id: 72f988bf-86f1-41af-91ab-2d7cd011db47
           TF_VAR_customer_data_sql_object_id: 2609bcf7-475f-49c0-8040-85e667b4f3aa
+
+  automate-pullrequest-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Approve PRs by Justin
+        if: github.actor == 'juswen@microsoft.com'
+        uses: andrewmusgrave/automatic-pull-request-review@0.0.2
+        with:
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          event: APPROVE
+          body: 'Thank you Justin 🙏'
