@@ -3,7 +3,7 @@ resource "azurerm_resource_group" "customer_data" {
   location = var.customer_data_location
 }
 
-resource "random_password" "sql_password" {
+resource "random_password" "customer_data_sql_password" {
   length           = 64
   special          = true
   override_special = "_%@"
@@ -63,7 +63,7 @@ resource "azurerm_sql_server" "customer_data" {
   location                     = azurerm_resource_group.customer_data.location
   version                      = "12.0"
   administrator_login          = "jwendl"
-  administrator_login_password = random_password.sql_password.result
+  administrator_login_password = random_password.customer_data_sql_password.result
 }
 
 resource "azurerm_sql_database" "customer_data" {
@@ -81,10 +81,10 @@ resource "azurerm_sql_active_directory_administrator" "customer_data" {
   object_id           = var.customer_data_sql_object_id
 }
 
-output "instrumentation_key" {
+output "customer_data_instrumentation_key" {
   value = "${azurerm_application_insights.customer_data.instrumentation_key}"
 }
 
-output "app_id" {
+output "customer_data_app_id" {
   value = "${azurerm_application_insights.customer_data.app_id}"
 }
