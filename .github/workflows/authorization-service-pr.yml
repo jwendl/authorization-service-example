@@ -135,7 +135,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Approve PRs by Justin
-        if: github.actor == 'juswen@microsoft.com'
+        if: github.actor == 'jwendl'
         uses: andrewmusgrave/automatic-pull-request-review@0.0.2
         with:
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
