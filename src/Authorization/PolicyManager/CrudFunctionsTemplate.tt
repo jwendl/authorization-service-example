@@ -9,8 +9,6 @@
         "Thing",
         "ThingAttribute",
         "ThingPolicy",
-        "User",
-        "UserAttribute",
     };
 #>using System;
 using System.Collections.Generic;

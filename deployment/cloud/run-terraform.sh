@@ -30,6 +30,15 @@ export TF_VAR_customer_data_sql_server_name="jwcustomerdatadb"
 export TF_VAR_customer_data_sql_database_name="CustomerData"
 export TF_VAR_customer_data_sql_tenant_id="72f988bf-86f1-41af-91ab-2d7cd011db47"
 export TF_VAR_customer_data_sql_object_id="2609bcf7-475f-49c0-8040-85e667b4f3aa"
+export TF_VAR_order_data_resource_group_name="OrderData"
+export TF_VAR_order_data_location="westus2"
+export TF_VAR_order_data_storage_account_name="jworderdatastorage"
+export TF_VAR_order_data_functions_plan_name="jworderdataplan"
+export TF_VAR_order_data_functions_name="jworderdataapi"
+export TF_VAR_order_data_app_insights_name="jworderdataai"
+export TF_VAR_order_data_cosmos_server_name="jworderdatadb"
+export TF_VAR_order_data_cosmos_failover_location="eastus"
+export TF_VAR_order_data_cosmos_sql_database="OrderData"
 
 mkdir -p ~/tfoutput
 terraform init

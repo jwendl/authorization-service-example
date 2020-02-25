@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Graph;
 using Moq;
 using PolicyManager.DataAccess.Interfaces;
 using PolicyManager.DataAccess.Models;
@@ -17,17 +19,17 @@ namespace PolicyManager.DataAccess.Tests.Repositories
 {
     public class AuthorizationRepositoryTests
     {
-        private readonly Mock<IDataRepository<User>> mockUserRepository;
+        private readonly Mock<IMicrosoftGraphRepository> mockMicrosoftGraphRepository;
         private readonly Mock<IDataRepository<Thing>> mockThingRepository;
         private readonly IServiceProvider serviceProvider;
 
         public AuthorizationRepositoryTests()
         {
-            mockUserRepository = new Mock<IDataRepository<User>>();
+            mockMicrosoftGraphRepository = new Mock<IMicrosoftGraphRepository>();
             mockThingRepository = new Mock<IDataRepository<Thing>>();
 
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddSingleton(mockUserRepository.Object);
+            serviceCollection.AddSingleton(mockMicrosoftGraphRepository.Object);
             serviceCollection.AddSingleton(mockThingRepository.Object);
             serviceProvider = serviceCollection.BuildServiceProvider();
         }
@@ -45,15 +47,16 @@ namespace PolicyManager.DataAccess.Tests.Repositories
                 }
             };
 
-            var userRepository = serviceProvider.GetRequiredService<IDataRepository<User>>();
+            var microsoftGraphRepository = serviceProvider.GetRequiredService<IMicrosoftGraphRepository>();
             var thingRepository = serviceProvider.GetRequiredService<IDataRepository<Thing>>();
-            var authorizationRepository = new AuthorizationRepository(userRepository, thingRepository);
+            var authorizationRepository = new AuthorizationRepository(microsoftGraphRepository, thingRepository);
 
             var mockClaimsPrincipal = new Mock<ClaimsPrincipal>();
             var mockClaimsIdentity = new Mock<ClaimsIdentity>();
             mockClaimsIdentity.Setup(ci => ci.Name).Returns("juswen@microsoft.com");
             mockClaimsPrincipal.Setup(cp => cp.Identity).Returns(mockClaimsIdentity.Object);
 
+            var authenticationHeaderValue = new AuthenticationHeaderValue("test");
             var initialState = new InitialState<Group>()
             {
                 ClaimsPrincipal = mockClaimsPrincipal.Object,
@@ -64,7 +67,7 @@ namespace PolicyManager.DataAccess.Tests.Repositories
                 }
             };
 
-            var actualResult = await authorizationRepository.EvaluateAsync(initialState);
+            var actualResult = await authorizationRepository.EvaluateAsync(authenticationHeaderValue, initialState);
             actualResult.Should().BeEquivalentTo(expectedResult);
         }
 
@@ -82,10 +85,10 @@ namespace PolicyManager.DataAccess.Tests.Repositories
 
             var expectedUser = new User()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid().ToString(),
             };
 
-            mockUserRepository.Setup(ur => ur.FindSingleAndIncludeAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<Expression<Func<User, ICollection<UserAttribute>>>[]>()))
+            mockMicrosoftGraphRepository.Setup(ur => ur.FetchMeAsync(It.IsAny<AuthenticationHeaderValue>()))
                 .Returns(Task.FromResult(expectedUser));
 
             var expectedThing = new Thing()
@@ -102,15 +105,16 @@ namespace PolicyManager.DataAccess.Tests.Repositories
             mockThingRepository.Setup(tr => tr.FindAsync(It.IsAny<Expression<Func<Thing, bool>>>()))
                 .Returns(Task.FromResult(new List<Thing>() { expectedThing }.AsEnumerable()));
 
-            var userRepository = serviceProvider.GetRequiredService<IDataRepository<User>>();
+            var microsoftGraphRepository = serviceProvider.GetRequiredService<IMicrosoftGraphRepository>();
             var thingRepository = serviceProvider.GetRequiredService<IDataRepository<Thing>>();
-            var authorizationRepository = new AuthorizationRepository(userRepository, thingRepository);
+            var authorizationRepository = new AuthorizationRepository(microsoftGraphRepository, thingRepository);
 
             var mockClaimsPrincipal = new Mock<ClaimsPrincipal>();
             var mockClaimsIdentity = new Mock<ClaimsIdentity>();
             mockClaimsIdentity.Setup(ci => ci.Name).Returns("juswen@microsoft.com");
             mockClaimsPrincipal.Setup(cp => cp.Identity).Returns(mockClaimsIdentity.Object);
 
+            var authenticationHeaderValue = new AuthenticationHeaderValue("test");
             var initialState = new InitialState<Group>()
             {
                 ClaimsPrincipal = mockClaimsPrincipal.Object,
@@ -120,7 +124,7 @@ namespace PolicyManager.DataAccess.Tests.Repositories
                 }
             };
 
-            var actualResult = await authorizationRepository.EvaluateAsync(initialState);
+            var actualResult = await authorizationRepository.EvaluateAsync(authenticationHeaderValue, initialState);
             actualResult.Should().BeEquivalentTo(expectedResult);
         }
 
@@ -138,16 +142,11 @@ namespace PolicyManager.DataAccess.Tests.Repositories
 
             var expectedUser = new User()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid().ToString(),
+                OfficeLocation = "Carnation, WA",
             };
-            expectedUser.UserAttributes.Add(new UserAttribute()
-            {
-                Id = Guid.NewGuid(),
-                Key = "location",
-                Value = "/NA/Washington/Redmond/Building 122",
-            });
 
-            mockUserRepository.Setup(ur => ur.FindSingleAndIncludeAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<Expression<Func<User, ICollection<UserAttribute>>>[]>()))
+            mockMicrosoftGraphRepository.Setup(ur => ur.FetchMeAsync(It.IsAny<AuthenticationHeaderValue>()))
                 .Returns(Task.FromResult(expectedUser));
 
             var expectedThing = new Thing()
@@ -159,21 +158,22 @@ namespace PolicyManager.DataAccess.Tests.Repositories
             {
                 Id = Guid.NewGuid(),
                 Name = "Washington is Valid",
-                Expression = "user_location.Contains(\"/NA/Washington\")",
+                Expression = "user_location.Contains(\"Carnation, WA\")",
             });
 
             mockThingRepository.Setup(tr => tr.FindAsync(It.IsAny<Expression<Func<Thing, bool>>>()))
                 .Returns(Task.FromResult(new List<Thing>() { expectedThing }.AsEnumerable()));
 
-            var userRepository = serviceProvider.GetRequiredService<IDataRepository<User>>();
+            var microsoftGraphRepository = serviceProvider.GetRequiredService<IMicrosoftGraphRepository>();
             var thingRepository = serviceProvider.GetRequiredService<IDataRepository<Thing>>();
-            var authorizationRepository = new AuthorizationRepository(userRepository, thingRepository);
+            var authorizationRepository = new AuthorizationRepository(microsoftGraphRepository, thingRepository);
 
             var mockClaimsPrincipal = new Mock<ClaimsPrincipal>();
             var mockClaimsIdentity = new Mock<ClaimsIdentity>();
             mockClaimsIdentity.Setup(ci => ci.Name).Returns("juswen@microsoft.com");
             mockClaimsPrincipal.Setup(cp => cp.Identity).Returns(mockClaimsIdentity.Object);
 
+            var authenticationHeaderValue = new AuthenticationHeaderValue("test");
             var initialState = new InitialState<Group>()
             {
                 ClaimsPrincipal = mockClaimsPrincipal.Object,
@@ -184,7 +184,7 @@ namespace PolicyManager.DataAccess.Tests.Repositories
                 }
             };
 
-            var actualResult = await authorizationRepository.EvaluateAsync(initialState);
+            var actualResult = await authorizationRepository.EvaluateAsync(authenticationHeaderValue, initialState);
             actualResult.Should().BeEquivalentTo(expectedResult);
         }
 
@@ -202,16 +202,11 @@ namespace PolicyManager.DataAccess.Tests.Repositories
 
             var expectedUser = new User()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid().ToString(),
+                OfficeLocation = "Carnation, WA",
             };
-            expectedUser.UserAttributes.Add(new UserAttribute()
-            {
-                Id = Guid.NewGuid(),
-                Key = "location",
-                Value = "/NA/Washington/Redmond/Building 123",
-            });
 
-            mockUserRepository.Setup(ur => ur.FindSingleAndIncludeAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<Expression<Func<User, ICollection<UserAttribute>>>[]>()))
+            mockMicrosoftGraphRepository.Setup(ur => ur.FetchMeAsync(It.IsAny<AuthenticationHeaderValue>()))
                 .Returns(Task.FromResult(expectedUser));
 
             var expectedThing = new Thing()
@@ -223,21 +218,22 @@ namespace PolicyManager.DataAccess.Tests.Repositories
             {
                 Id = Guid.NewGuid(),
                 Name = "Washington is Valid",
-                Expression = "user_location.Contains(\"/NA/Washington/Redmond/Building 122\")",
+                Expression = "user_location.Contains(\"Redmond, WA\")",
             });
 
             mockThingRepository.Setup(tr => tr.FindAsync(It.IsAny<Expression<Func<Thing, bool>>>()))
                 .Returns(Task.FromResult(new List<Thing>() { expectedThing }.AsEnumerable()));
 
-            var userRepository = serviceProvider.GetRequiredService<IDataRepository<User>>();
+            var microsoftGraphRepository = serviceProvider.GetRequiredService<IMicrosoftGraphRepository>();
             var thingRepository = serviceProvider.GetRequiredService<IDataRepository<Thing>>();
-            var authorizationRepository = new AuthorizationRepository(userRepository, thingRepository);
+            var authorizationRepository = new AuthorizationRepository(microsoftGraphRepository, thingRepository);
 
             var mockClaimsPrincipal = new Mock<ClaimsPrincipal>();
             var mockClaimsIdentity = new Mock<ClaimsIdentity>();
             mockClaimsIdentity.Setup(ci => ci.Name).Returns("juswen@microsoft.com");
             mockClaimsPrincipal.Setup(cp => cp.Identity).Returns(mockClaimsIdentity.Object);
 
+            var authenticationHeaderValue = new AuthenticationHeaderValue("test"); 
             var initialState = new InitialState<Group>()
             {
                 ClaimsPrincipal = mockClaimsPrincipal.Object,
@@ -248,7 +244,7 @@ namespace PolicyManager.DataAccess.Tests.Repositories
                 }
             };
 
-            var actualResult = await authorizationRepository.EvaluateAsync(initialState);
+            var actualResult = await authorizationRepository.EvaluateAsync(authenticationHeaderValue, initialState);
             actualResult.Should().BeEquivalentTo(expectedResult);
         }
     }

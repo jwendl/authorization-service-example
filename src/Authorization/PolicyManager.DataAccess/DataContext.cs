@@ -34,10 +34,6 @@ namespace PolicyManager.DataAccess
 
         public DbSet<ThingPolicy> ThingPolicies { get; set; }
 
-        public DbSet<User> Users { get; set; }
-
-        public DbSet<UserAttribute> UserAttributes { get; set; }
-
         protected override async void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!string.IsNullOrWhiteSpace(sqlConnectionConfiguration?.ConnectionString))
@@ -59,27 +55,6 @@ namespace PolicyManager.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             _ = modelBuilder ?? throw new ArgumentNullException(nameof(modelBuilder));
-
-            // User
-            modelBuilder.Entity<User>()
-                .Property(c => c.Id)
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<User>()
-                .HasKey(u => u.Id);
-
-            // User Attribute
-            modelBuilder.Entity<UserAttribute>()
-                .Property(c => c.Id)
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<UserAttribute>()
-                .HasKey(u => u.Id);
-
-            modelBuilder.Entity<UserAttribute>()
-                .HasOne(ua => ua.User)
-                .WithMany(u => u.UserAttributes)
-                .HasForeignKey(ua => ua.UserId);
 
             // Resource
             modelBuilder.Entity<Thing>()

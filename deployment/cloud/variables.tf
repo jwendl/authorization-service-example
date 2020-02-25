@@ -93,3 +93,39 @@ variable "customer_data_sql_tenant_id" {
 variable "customer_data_sql_object_id" {
   description = "The object id of the admin for sql server"
 }
+
+variable "order_data_resource_group_name" {
+  description = "The customer data resource group"
+}
+
+variable "order_data_location" {
+  description = "The customer data location"
+}
+
+variable "order_data_storage_account_name" {
+  description = "The customer data storage account name"
+}
+
+variable "order_data_functions_plan_name" {
+  description = "The customer data service app plan name"
+}
+
+variable "order_data_functions_name" {
+  description = "The customer data functions app name"
+}
+
+variable "order_data_app_insights_name" {
+  description = "The customer data app insights name"
+}
+
+variable "order_data_cosmos_server_name" {
+  description = "The cosmos database server name"
+}
+
+variable "order_data_cosmos_failover_location" {
+  description = "The failover location for cosmos db"
+}
+
+variable "order_data_cosmos_sql_database" {
+  description = "The cosmos database name"
+}
