@@ -195,6 +195,15 @@ jobs:
           TF_VAR_customer_data_sql_database_name: CustomerData
           TF_VAR_customer_data_sql_tenant_id: 72f988bf-86f1-41af-91ab-2d7cd011db47
           TF_VAR_customer_data_sql_object_id: 2609bcf7-475f-49c0-8040-85e667b4f3aa
+          TF_VAR_order_data_resource_group_name: OrderData
+          TF_VAR_order_data_location: westus2
+          TF_VAR_order_data_storage_account_name: jworderdatastorage
+          TF_VAR_order_data_functions_plan_name: jworderdataplan
+          TF_VAR_order_data_functions_name: jworderdataapi
+          TF_VAR_order_data_app_insights_name: jworderdataai
+          TF_VAR_order_data_cosmos_server_name: jworderdatadb
+          TF_VAR_order_data_cosmos_failover_location: eastus
+          TF_VAR_order_data_cosmos_sql_database: OrderData
 
       - name: 'Terraform Apply'
         uses: hashicorp/terraform-github-actions@master
