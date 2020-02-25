@@ -19,7 +19,57 @@ namespace PolicyManager.DataAccess.Repositories
             this.tokenCreator = tokenCreator ?? throw new ArgumentNullException(nameof(tokenCreator));
         }
 
+        public async Task<User> FetchMeAsync(AuthenticationHeaderValue authenticationHeaderValue)
+        {
+            _ = authenticationHeaderValue ?? throw new ArgumentNullException(nameof(authenticationHeaderValue));
+
+            var graphServiceClient = BuildGraphServiceClient(authenticationHeaderValue);
+            return await graphServiceClient.Me
+                .Request()
+                .GetAsync();
+        }
+
         public async Task<IEnumerable<Group>> FetchMyGroupsAsync(AuthenticationHeaderValue authenticationHeaderValue)
+        {
+            _ = authenticationHeaderValue ?? throw new ArgumentNullException(nameof(authenticationHeaderValue));
+
+            var graphServiceClient = BuildGraphServiceClient(authenticationHeaderValue);
+            var userMemberOfCollection = await graphServiceClient.Me.MemberOf
+                .Request()
+                .GetAsync();
+
+            var graphGroups = new List<Group>();
+            foreach (DirectoryObject directoryObject in userMemberOfCollection)
+            {
+                if (directoryObject is Group)
+                {
+                    if (directoryObject is Group group)
+                    {
+                        graphGroups.Add(new Group()
+                        {
+                            Id = group.Id,
+                            DisplayName = group.DisplayName,
+                        });
+                    }
+                }
+
+                if (directoryObject is DirectoryRole)
+                {
+                    if (directoryObject is DirectoryRole directoryRole)
+                    {
+                        graphGroups.Add(new Group()
+                        {
+                            Id = directoryRole.Id,
+                            DisplayName = directoryRole.DisplayName,
+                        });
+                    }
+                }
+            }
+
+            return graphGroups;
+        }
+
+        private GraphServiceClient BuildGraphServiceClient(AuthenticationHeaderValue authenticationHeaderValue)
         {
             _ = authenticationHeaderValue ?? throw new ArgumentNullException(nameof(authenticationHeaderValue));
 
@@ -33,41 +83,7 @@ namespace PolicyManager.DataAccess.Repositories
                 });
 
             var graphServiceClient = new GraphServiceClient(delegateAuthenticationProvider);
-            var userMemberOfCollection = await graphServiceClient.Me.MemberOf
-                .Request()
-                .GetAsync();
-
-            var graphGroups = new List<Group>();
-            foreach (DirectoryObject directoryObject in userMemberOfCollection)
-            {
-                if (directoryObject is Group)
-                {
-                    var group = directoryObject as Group;
-                    if (group != null)
-                    {
-                        graphGroups.Add(new Group()
-                        {
-                            Id = group.Id,
-                            DisplayName = group.DisplayName,
-                        });
-                    }
-                }
-
-                if (directoryObject is DirectoryRole)
-                {
-                    var directoryRole = directoryObject as DirectoryRole;
-                    if (directoryRole != null)
-                    {
-                        graphGroups.Add(new Group()
-                        {
-                            Id = directoryRole.Id,
-                            DisplayName = directoryRole.DisplayName,
-                        });
-                    }
-                }
-            }
-
-            return graphGroups;
+            return graphServiceClient;
         }
     }
 }

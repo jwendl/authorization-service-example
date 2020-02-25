@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Flee.PublicTypes;
 using PolicyManager.DataAccess.Functions;
@@ -13,21 +14,20 @@ namespace PolicyManager.DataAccess.Repositories
     public class AuthorizationRepository
         : IAuthorizationRepository
     {
-        private readonly IDataRepository<User> userRepository;
+        private readonly IMicrosoftGraphRepository microsoftGraphRepository;
         private readonly IDataRepository<Thing> thingRepository;
 
-        public AuthorizationRepository(IDataRepository<User> userRepository, IDataRepository<Thing> thingRepository)
+        public AuthorizationRepository(IMicrosoftGraphRepository microsoftGraphRepository, IDataRepository<Thing> thingRepository)
         {
-            this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            this.microsoftGraphRepository = microsoftGraphRepository ?? throw new ArgumentNullException(nameof(microsoftGraphRepository));
             this.thingRepository = thingRepository ?? throw new ArgumentNullException(nameof(thingRepository));
         }
 
-        public async Task<IEnumerable<PolicyResult>> EvaluateAsync(InitialState<Group> initialState)
+        public async Task<IEnumerable<PolicyResult>> EvaluateAsync(AuthenticationHeaderValue authenticationHeaderValue, InitialState<Group> initialState)
         {
             _ = initialState ?? throw new ArgumentNullException(nameof(initialState));
 
-            var user = await userRepository.FindSingleAndIncludeAsync(u => u.UserPrincipalName == initialState.ClaimsPrincipal.Identity.Name, u => u.UserAttributes);
-
+            var user = await microsoftGraphRepository.FetchMeAsync(authenticationHeaderValue);
             var things = await thingRepository.FindAsync(t => t.Identifier == initialState.Identifier);
 
             var expressionContext = new ExpressionContext();
@@ -40,10 +40,7 @@ namespace PolicyManager.DataAccess.Repositories
             var policyResults = new List<PolicyResult>();
             if (user != null)
             {
-                foreach (var keyValuePair in user.UserAttributes)
-                {
-                    variables.Add($"user_{keyValuePair.Key}", keyValuePair.Value);
-                }
+                if (!string.IsNullOrWhiteSpace(user.OfficeLocation)) variables.Add($"user_location", user.OfficeLocation);
 
                 foreach (var thing in things)
                 {

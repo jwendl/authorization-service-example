@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using ApiExampleProject.Authentication.Interfaces;
@@ -61,7 +60,7 @@ namespace ApiExampleProject.Authentication
                 var authenticationResult = await acquireTokenOnBehalfOfBuilder.ExecuteAsync();
                 return authenticationResult.AccessToken;
             }
-            catch(MsalServiceException msalServiceException)
+            catch (MsalServiceException msalServiceException)
             {
                 logger.LogError(msalServiceException, msalServiceException.Message);
                 throw new InvalidOperationException(AuthenticationResources.MsalException, msalServiceException);

@@ -1,5 +1,6 @@
 ﻿using System;
 using ApiExampleProject.Authentication;
+using ApiExampleProject.Authentication.Extensions;
 using ApiExampleProject.Authentication.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +19,12 @@ namespace PolicyManager.DataAccess.Extensions
             serviceCollection.AddDbContext<DataContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
             serviceCollection.AddScoped<IDataContext, DataContext>();
             serviceCollection.AddSingleton<IAzureServiceTokenProviderWrapper, AzureServiceTokenProviderWrapper>();
+
+            serviceCollection.AddTokenCreatorDependencies(configuration);
+            serviceCollection.AddSingleton<IMicrosoftGraphRepository, MicrosoftGraphRepository>();
             serviceCollection.AddScoped(typeof(IDataRepository<>), typeof(DataRepository<>));
+
+            serviceCollection.AddScoped<IAuthorizationRepository, AuthorizationRepository>();
 
             return serviceCollection;
         }

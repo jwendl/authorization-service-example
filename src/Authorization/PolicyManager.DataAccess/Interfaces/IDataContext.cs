@@ -14,10 +14,6 @@ namespace PolicyManager.DataAccess.Interfaces
 
         DbSet<ThingPolicy> ThingPolicies { get; set; }
 
-        DbSet<User> Users { get; set; }
-
-        DbSet<UserAttribute> UserAttributes { get; set; }
-
         ValueTask<EntityEntry<TEntity>> AddAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default)
             where TEntity : class;
 
