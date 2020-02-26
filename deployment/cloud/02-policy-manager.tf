@@ -39,8 +39,15 @@ resource "azurerm_function_app" "policy_manager" {
   app_settings = {
     APPINSIGHTS_INSTRUMENTATIONKEY = azurerm_application_insights.policy_manager.instrumentation_key
     FUNCTIONS_WORKER_RUNTIME       = "dotnet"
-    TokenCreator__ClientSecret     = format("@Microsoft.KeyVault(SecretUri=%s)", var.app_client_secret_key_vault_uri)
     WEBSITE_RUN_FROM_PACKAGE       = "1"
+    TokenValidator__Audience       = var.app_audience
+    TokenValidator__TenantId       = var.app_tenant_id
+    TokenValidator__ClientId       = var.app_client_id
+    TokenCreator__TenantId         = var.app_tenant_id
+    TokenCreator__ClientId         = var.app_client_id
+    TokenCreator__ClientSecret     = format("@Microsoft.KeyVault(SecretUri=%s)", var.app_client_secret_key_vault_uri)
+    TokenCreator__Scopes           = "https://graph.microsoft.com/User.Read"
+    Database__ConnectionString     = "'Server=tcp:${azurerm_sql_server.policy_manager.fully_qualified_domain_name},1433;Database=${azurerm_sql_database.policy_manager.name};"
   }
 
   lifecycle {

@@ -1,13 +1,37 @@
-variable "dashboard_resource_group_name" {
-  description = "The dashboard resource group"
+variable "key_vault_resource_group_name" {
+  description = "The resource group name of the key vault"
 }
 
-variable "dashboard_name" {
-  description = "The dashboard name"
+variable "key_vault_location" {
+  description = "The location of the key vault"
 }
 
-variable "dashboard_location" {
-  description = "The dashboard location"
+variable "key_vault_name" {
+  description = "The key vault name"
+}
+
+variable "key_vault_tenant_id" {
+  description = "The tenant id of the key vault"
+}
+
+variable "terraform_tenant_id" {
+  description = "The key vault tenant id"
+}
+
+variable "terraform_object_id" {
+  description = "The key vault object id"
+}
+
+variable "app_audience" {
+  description = "The policy manager app audience"
+}
+
+variable "app_tenant_id" {
+  description = "The policy manager app tenant id"
+}
+
+variable "app_client_id" {
+  description = "The policy manager app client id"
 }
 
 variable "app_client_secret_key_vault_uri" {
@@ -129,3 +153,20 @@ variable "order_data_cosmos_failover_location" {
 variable "order_data_cosmos_sql_database" {
   description = "The cosmos database name"
 }
+
+variable "cosomos_primary_key_secret_key_vault_uri" {
+  description = "The cosmos db primary key secret keyvault uri"
+}
+
+variable "dashboard_resource_group_name" {
+  description = "The dashboard resource group"
+}
+
+variable "dashboard_name" {
+  description = "The dashboard name"
+}
+
+variable "dashboard_location" {
+  description = "The dashboard location"
+}
+

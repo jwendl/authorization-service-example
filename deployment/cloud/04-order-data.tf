@@ -31,10 +31,14 @@ resource "azurerm_function_app" "order_data" {
   storage_connection_string = azurerm_storage_account.order_data.primary_connection_string
   version                   = "~3"
   app_settings = {
-    APPINSIGHTS_INSTRUMENTATIONKEY = azurerm_application_insights.order_data.instrumentation_key
-    FUNCTIONS_WORKER_RUNTIME       = "dotnet"
-    TokenCreator__ClientSecret     = format("@Microsoft.KeyVault(SecretUri=%s)", var.app_client_secret_key_vault_uri)
-    WEBSITE_RUN_FROM_PACKAGE       = "1"
+    APPINSIGHTS_INSTRUMENTATIONKEY        = azurerm_application_insights.order_data.instrumentation_key
+    FUNCTIONS_WORKER_RUNTIME              = "dotnet"
+    WEBSITE_RUN_FROM_PACKAGE              = "1"
+    TokenValidator__Audience              = var.app_audience
+    TokenValidator__TenantId              = var.app_tenant_id
+    TokenValidator__ClientId              = var.app_client_id
+    CosmosConfiguration__EndpointLocation = azurerm_cosmosdb_account.order_data.endpoint
+    CosmosConfiguration__PrimaryKey       = format("@Microsoft.KeyVault(SecretUri=%s)", var.cosomos_primary_key_secret_key_vault_uri)
   }
 
   lifecycle {
@@ -83,6 +87,12 @@ resource "azurerm_cosmosdb_sql_database" "order_data" {
   resource_group_name = azurerm_cosmosdb_account.order_data.resource_group_name
   account_name        = azurerm_cosmosdb_account.order_data.name
   throughput          = 400
+}
+
+resource "azurerm_key_vault_secret" "key_vault_secret" {
+  name         = "cosmos-primary-key"
+  value        = azurerm_cosmosdb_account.order_data.primary_master_key
+  key_vault_id = azurerm_key_vault.key_vault.id
 }
 
 output "order_data_instrumentation_key" {

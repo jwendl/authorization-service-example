@@ -6,6 +6,10 @@ output "client_id" {
   value = azuread_application.app_registration.application_id
 }
 
+output "keyvault_id" {
+  value = azurerm_key_vault.key_vault.id
+}
+
 output "keyvault_secret_uri" {
   value = azurerm_key_vault_secret.key_vault_secret.id
 }
