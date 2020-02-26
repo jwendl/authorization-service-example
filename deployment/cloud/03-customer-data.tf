@@ -39,8 +39,11 @@ resource "azurerm_function_app" "customer_data" {
   app_settings = {
     APPINSIGHTS_INSTRUMENTATIONKEY = azurerm_application_insights.customer_data.instrumentation_key
     FUNCTIONS_WORKER_RUNTIME       = "dotnet"
-    TokenCreator__ClientSecret     = format("@Microsoft.KeyVault(SecretUri=%s)", var.app_client_secret_key_vault_uri)
     WEBSITE_RUN_FROM_PACKAGE       = "1"
+    TokenValidator__Audience       = var.app_audience
+    TokenValidator__TenantId       = var.app_tenant_id
+    TokenValidator__ClientId       = var.app_client_id
+    Database__ConnectionString     = "'Server=tcp:${azurerm_sql_server.customer_data.fully_qualified_domain_name},1433;Database=${azurerm_sql_database.customer_data.name};"
   }
 
   lifecycle {
