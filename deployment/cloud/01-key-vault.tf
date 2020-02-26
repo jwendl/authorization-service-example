@@ -11,7 +11,6 @@ resource "azurerm_key_vault" "key_vault" {
   tenant_id                   = var.key_vault_tenant_id
 
   sku_name = "standard"
-
   network_acls {
     default_action = "Allow"
     bypass         = "AzureServices"
