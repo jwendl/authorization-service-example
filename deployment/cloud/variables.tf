@@ -154,10 +154,6 @@ variable "order_data_cosmos_sql_database" {
   description = "The cosmos database name"
 }
 
-variable "cosomos_primary_key_secret_key_vault_uri" {
-  description = "The cosmos db primary key secret keyvault uri"
-}
-
 variable "dashboard_resource_group_name" {
   description = "The dashboard resource group"
 }

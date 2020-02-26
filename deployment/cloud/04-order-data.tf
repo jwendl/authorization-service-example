@@ -38,7 +38,7 @@ resource "azurerm_function_app" "order_data" {
     TokenValidator__TenantId              = var.app_tenant_id
     TokenValidator__ClientId              = var.app_client_id
     CosmosConfiguration__EndpointLocation = azurerm_cosmosdb_account.order_data.endpoint
-    CosmosConfiguration__PrimaryKey       = format("@Microsoft.KeyVault(SecretUri=%s)", var.cosomos_primary_key_secret_key_vault_uri)
+    CosmosConfiguration__PrimaryKey       = format("@Microsoft.KeyVault(SecretUri=%s)", azurerm_key_vault_secret.key_vault_secret.id)
   }
 
   lifecycle {
