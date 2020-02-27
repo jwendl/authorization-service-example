@@ -22,8 +22,8 @@ namespace PolicyManager
     public class ThingFunctions
         : BaseCrudFunctions<Thing>
     {
-        public ThingFunctions(ITokenValidator tokenValidator, IJsonHttpContentValidator jsonHttpContentValidator, IDataRepository<Thing> thingRepository)
-            : base(tokenValidator, jsonHttpContentValidator, thingRepository)
+        public ThingFunctions(ITokenValidator tokenValidator, IJsonHttpContentValidator jsonHttpContentValidator, IJsonTextSerializer jsonTextSerializer, IDataRepository<Thing> thingRepository)
+            : base(tokenValidator, jsonHttpContentValidator, jsonTextSerializer, thingRepository)
         {
 
         }
@@ -116,8 +116,8 @@ namespace PolicyManager
     public class ThingAttributeFunctions
         : BaseCrudFunctions<ThingAttribute>
     {
-        public ThingAttributeFunctions(ITokenValidator tokenValidator, IJsonHttpContentValidator jsonHttpContentValidator, IDataRepository<ThingAttribute> thingAttributeRepository)
-            : base(tokenValidator, jsonHttpContentValidator, thingAttributeRepository)
+        public ThingAttributeFunctions(ITokenValidator tokenValidator, IJsonHttpContentValidator jsonHttpContentValidator, IJsonTextSerializer jsonTextSerializer, IDataRepository<ThingAttribute> thingAttributeRepository)
+            : base(tokenValidator, jsonHttpContentValidator, jsonTextSerializer, thingAttributeRepository)
         {
 
         }
@@ -210,8 +210,8 @@ namespace PolicyManager
     public class ThingPolicyFunctions
         : BaseCrudFunctions<ThingPolicy>
     {
-        public ThingPolicyFunctions(ITokenValidator tokenValidator, IJsonHttpContentValidator jsonHttpContentValidator, IDataRepository<ThingPolicy> thingPolicyRepository)
-            : base(tokenValidator, jsonHttpContentValidator, thingPolicyRepository)
+        public ThingPolicyFunctions(ITokenValidator tokenValidator, IJsonHttpContentValidator jsonHttpContentValidator, IJsonTextSerializer jsonTextSerializer, IDataRepository<ThingPolicy> thingPolicyRepository)
+            : base(tokenValidator, jsonHttpContentValidator, jsonTextSerializer, thingPolicyRepository)
         {
 
         }

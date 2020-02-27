@@ -20,12 +20,14 @@ namespace PolicyManager
     {
         private readonly ITokenValidator tokenValidator;
         private readonly IJsonHttpContentValidator jsonHttpContentValidator;
+        private readonly IJsonTextSerializer jsonTextSerializer;
         private readonly IDataRepository<T> dataRepository;
 
-        protected BaseCrudFunctions(ITokenValidator tokenValidator, IJsonHttpContentValidator jsonHttpContentValidator, IDataRepository<T> dataRepository)
+        protected BaseCrudFunctions(ITokenValidator tokenValidator, IJsonHttpContentValidator jsonHttpContentValidator, IJsonTextSerializer jsonTextSerializer, IDataRepository<T> dataRepository)
         {
             this.tokenValidator = tokenValidator ?? throw new ArgumentNullException(nameof(tokenValidator));
             this.jsonHttpContentValidator = jsonHttpContentValidator ?? throw new ArgumentNullException(nameof(jsonHttpContentValidator));
+            this.jsonTextSerializer = jsonTextSerializer ?? throw new ArgumentNullException(nameof(jsonTextSerializer));
             this.dataRepository = dataRepository ?? throw new ArgumentNullException(nameof(dataRepository));
         }
 
@@ -84,7 +86,8 @@ namespace PolicyManager
             var claimsPrincipal = await tokenValidator.ValidateTokenAsync(httpRequestMessage.Headers.Authorization);
             if (claimsPrincipal == null) return new HttpResponseMessage(HttpStatusCode.Unauthorized);
 
-            var item = await httpRequestMessage.Content.ReadAsAsync<T>();
+            var contentStream = await httpRequestMessage.Content.ReadAsStreamAsync();
+            var item = await jsonTextSerializer.DeserializeObjectAsync<T>(contentStream);
             if (Guid.Parse(id) != item.Id) return new HttpResponseMessage(HttpStatusCode.BadRequest);
 
             var jsonValidationResult = await jsonHttpContentValidator.ValidateJsonAsync<T, TValidator>(httpRequestMessage.Content);

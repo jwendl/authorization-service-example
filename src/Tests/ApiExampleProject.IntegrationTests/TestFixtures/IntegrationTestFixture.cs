@@ -44,12 +44,7 @@ namespace ApiExampleProject.IntegrationTests.TestFixtures
         {
             if (disposing)
             {
-                if (!funcHostProcess.HasExited)
-                {
-                    funcHostProcess.Kill();
-                }
-
-                funcHostProcess.Kill();
+                funcHostProcess.Close();
                 funcHostProcess.Dispose();
             }
         }

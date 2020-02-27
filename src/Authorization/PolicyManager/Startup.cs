@@ -1,6 +1,7 @@
 ﻿using System;
 using ApiExampleProject.Authentication.Extensions;
 using ApiExampleProject.Common.Interfaces;
+using ApiExampleProject.Common.Serializers;
 using ApiExampleProject.Common.Validators;
 using ApiExampleProject.Documentation;
 using ApiExampleProject.Documentation.Interfaces;
@@ -31,6 +32,7 @@ namespace PolicyManager
             builder.Services.AddTokenValidatorDependencies(configuration);
             builder.Services.AddSingleton<IJsonHttpContentValidator, JsonHttpContentValidator>();
             builder.Services.AddScoped<IDocumentationRepository, DocumentationRepository>();
+            builder.Services.AddScoped<IJsonTextSerializer, JsonTextSerializer>();
         }
     }
 }

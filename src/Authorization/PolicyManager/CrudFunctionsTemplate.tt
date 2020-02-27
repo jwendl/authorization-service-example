@@ -46,8 +46,8 @@ namespace PolicyManager
     public class <#= model #>Functions
         : BaseCrudFunctions<<#= model #>>
     {
-        public <#= model #>Functions(ITokenValidator tokenValidator, IJsonHttpContentValidator jsonHttpContentValidator, IDataRepository<<#= model #>> <#= lowerModel #>Repository)
-            : base(tokenValidator, jsonHttpContentValidator, <#= lowerModel #>Repository)
+        public <#= model #>Functions(ITokenValidator tokenValidator, IJsonHttpContentValidator jsonHttpContentValidator, IJsonTextSerializer jsonTextSerializer, IDataRepository<<#= model #>> <#= lowerModel #>Repository)
+            : base(tokenValidator, jsonHttpContentValidator, jsonTextSerializer, <#= lowerModel #>Repository)
         {
 
         }

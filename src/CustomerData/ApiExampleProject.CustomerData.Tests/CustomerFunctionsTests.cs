@@ -12,6 +12,7 @@ using ApiExampleProject.Common.Constants;
 using ApiExampleProject.Common.Interfaces;
 using ApiExampleProject.Common.Models;
 using ApiExampleProject.Common.Pagination;
+using ApiExampleProject.Common.Serializers;
 using ApiExampleProject.CustomerData.DataAccess.Interfaces;
 using ApiExampleProject.CustomerData.DataAccess.Models;
 using ApiExampleProject.CustomerData.DataAccess.Validators;
@@ -49,6 +50,7 @@ namespace ApiExampleProject.CustomerData.Tests
             serviceCollection.AddSingleton(mockJsonHttpContentValidator.Object);
             serviceCollection.AddSingleton(mockCustomerRepository.Object);
             serviceCollection.AddSingleton<CustomerFunctions>();
+            serviceCollection.AddSingleton<IJsonTextSerializer, JsonTextSerializer>();
             serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
@@ -97,13 +99,15 @@ namespace ApiExampleProject.CustomerData.Tests
                 Content = new StringContent(JsonSerializer.Serialize(expectedCustomer), Encoding.UTF8, MediaTypeNames.Application.Json)
             };
 
+            var jsonTextSerializer = serviceProvider.GetRequiredService<IJsonTextSerializer>();
             var customerFunctions = serviceProvider.GetRequiredService<CustomerFunctions>();
             var httpResponseMessage = await customerFunctions.CreateCustomer(httpRequestMessage, mockLogger.Object);
             httpResponseMessage.IsSuccessStatusCode.Should().BeTrue();
             httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.Created);
             httpResponseMessage.Content.Headers.ContentType.MediaType.Should().Be(ContentTypes.Application.Json);
 
-            var actualCustomer = await httpResponseMessage.Content.ReadAsAsync<Customer>();
+            var contentStream = await httpResponseMessage.Content.ReadAsStreamAsync();
+            var actualCustomer = await jsonTextSerializer.DeserializeObjectAsync<Customer>(contentStream);
             actualCustomer.Id.Should().NotBeEmpty();
             actualCustomer.FirstName.Should().Be(expectedCustomer.FirstName);
             actualCustomer.LastName.Should().Be(expectedCustomer.LastName);
@@ -161,13 +165,15 @@ namespace ApiExampleProject.CustomerData.Tests
                 .Returns(Task.FromResult(expectedCustomers.AsEnumerable()));
 
             using var httpRequestMessage = new HttpRequestMessage();
+            var jsonTextSerializer = serviceProvider.GetRequiredService<IJsonTextSerializer>();
             var customerFunctions = serviceProvider.GetRequiredService<CustomerFunctions>();
             var httpResponseMessage = await customerFunctions.ReadCustomers(httpRequestMessage, mockLogger.Object, null, null);
             httpResponseMessage.IsSuccessStatusCode.Should().BeTrue();
             httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
             httpResponseMessage.Content.Headers.ContentType.MediaType.Should().Be(ContentTypes.Application.Json);
 
-            var actualCustomers = await httpResponseMessage.Content.ReadAsAsync<IEnumerable<Customer>>();
+            var contentStream = await httpResponseMessage.Content.ReadAsStreamAsync();
+            var actualCustomers = await jsonTextSerializer.DeserializeObjectAsync<IEnumerable<Customer>>(contentStream);
             actualCustomers.Count().Should().Be(2);
         }
     }
