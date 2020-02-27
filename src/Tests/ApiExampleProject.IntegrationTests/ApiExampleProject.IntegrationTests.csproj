@@ -32,6 +32,7 @@
     <ProjectReference Include="$(RepoDir)\OrderSystem\ApiExampleProject.OrderSystem.Client\ApiExampleProject.OrderSystem.Client.csproj" />
     <ProjectReference Include="$(RepoDir)\CustomerData\ApiExampleProject.CustomerData.Client\ApiExampleProject.CustomerData.Client.csproj" />
     <ProjectReference Include="$(RepoDir)\CustomerData\ApiExampleProject.CustomerData.DataAccess\ApiExampleProject.CustomerData.DataAccess.csproj" />
+    <ProjectReference Include="$(RepoDir)\Authorization\PolicyManager.Client\PolicyManager.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>

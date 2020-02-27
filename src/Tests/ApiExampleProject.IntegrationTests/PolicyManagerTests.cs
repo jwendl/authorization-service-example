@@ -1,30 +1,29 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ApiExampleProject.CustomerData.Client;
-using ApiExampleProject.CustomerData.Client.Extensions;
-using ApiExampleProject.CustomerData.DataAccess.Models;
 using ApiExampleProject.IntegrationTests.Configuration;
 using ApiExampleProject.IntegrationTests.TestFixtures;
 using Bogus;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PolicyManager.Client;
+using PolicyManager.Client.Extensions;
+using PolicyManager.DataAccess.Models;
 using Xunit;
 
 namespace ApiExampleProject.IntegrationTests
 {
     [Trait("Category", "SkipWhenLiveUnitTesting")]
     [Collection(nameof(IntegrationTestCollection))]
-    public class CustomerFunctionsTests
+    public class PolicyManagerTests
     {
         private readonly IntegrationTestFixture integrationTestFixture;
         private readonly IServiceProvider serviceProvider;
 
-        public CustomerFunctionsTests(IntegrationTestFixture integrationTestFixture)
+        public PolicyManagerTests(IntegrationTestFixture integrationTestFixture)
         {
             this.integrationTestFixture = integrationTestFixture ?? throw new ArgumentNullException(nameof(integrationTestFixture));
-            integrationTestFixture.FunctionApplicationPath = ConfigurationHelper.Settings.CustomerDataApplicationPath;
-
+            integrationTestFixture.FunctionApplicationPath = ConfigurationHelper.Settings.PolicyManagerApplicationPath;
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Environment.CurrentDirectory)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -38,21 +37,20 @@ namespace ApiExampleProject.IntegrationTests
 
         [Fact]
         [Trait("Category", "Integration")]
-        public async Task CreateCustomer()
+        public async Task CreateThing()
         {
-            var customerGenerator = new Faker<Customer>()
-                .RuleFor(c => c.FirstName, p => p.Person.FirstName)
-                .RuleFor(c => c.LastName, p => p.Person.LastName)
-                .RuleFor(c => c.BirthDate, p => p.Person.DateOfBirth);
-            var expectedCustomer = customerGenerator.Generate();
+            var thingGenerator = new Faker<Thing>()
+                .RuleFor(t => t.Name, p => p.Lorem.Word())
+                .RuleFor(t => t.Description, p => p.Rant.Review())
+                .RuleFor(t => t.Identifier, p => p.Lorem.Word());
+            var expectedThing = thingGenerator.Generate();
 
-            var customerClient = serviceProvider.GetRequiredService<ICustomerServiceClient>();
-            var createdCustomer = await customerClient.CreateCustomerAsync(expectedCustomer);
+            var policyManagerClient = serviceProvider.GetRequiredService<IPolicyManagerServiceClient>();
+            var createdThing = await policyManagerClient.CreateThingAsync(expectedThing);
 
-            createdCustomer.Id.Should().NotBeEmpty();
-            createdCustomer.FirstName.Should().Be(expectedCustomer.FirstName);
-            createdCustomer.LastName.Should().Be(expectedCustomer.LastName);
-            createdCustomer.BirthDate.Should().Be(expectedCustomer.BirthDate);
+            createdThing.Id.Should().NotBeEmpty();
+            createdThing.Name.Should().Be(expectedThing.Name);
+            createdThing.Description.Should().Be(expectedThing.Description);
         }
     }
 }

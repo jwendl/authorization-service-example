@@ -12,10 +12,12 @@ namespace ApiExampleProject.IntegrationTests.TestFixtures
 
         public int Port { get; } = 7001;
 
+        public string FunctionApplicationPath { get; set; }
+
         public IntegrationTestFixture()
         {
             var functionHostPath = Environment.ExpandEnvironmentVariables(ConfigurationHelper.Settings.FunctionHostPath);
-            var functionAppFolder = Path.GetRelativePath(Directory.GetCurrentDirectory(), ConfigurationHelper.Settings.FunctionApplicationPath);
+            var functionAppFolder = Path.GetRelativePath(Directory.GetCurrentDirectory(), FunctionApplicationPath);
 
             funcHostProcess = new Process()
             {
