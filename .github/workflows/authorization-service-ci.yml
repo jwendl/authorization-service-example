@@ -117,9 +117,27 @@ jobs:
         with:
           dotnet-version: 3.1.101
 
+      - name: Download Policy Manager Artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: policy-manager-publish
+
+      - name: Download Customer Data Artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: customer-data-publish
+
+      - name: Download Order Data Artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: order-data-publish
+
       - name: Test with dotnet
         run: |
           dotnet publish ./ApiExampleProject.IntegrationTests.sln --output ./output/
+          cp -R ./policy-manager-publish .
+          cp -R ./customer-data-publish .
+          cp -R ./order-data-publish .
           pushd output
           npm i azure-functions-core-tools@3 --unsafe-perm true
           chmod +x ./node_modules/azure-functions-core-tools/bin/func
