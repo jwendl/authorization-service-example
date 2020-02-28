@@ -141,7 +141,7 @@ jobs:
 
           pushd output
           npm i azure-functions-core-tools@3 --unsafe-perm true
-          chmod +x ./node_modules/azure-functions-core-tools/bin/fun
+          chmod +x ./node_modules/azure-functions-core-tools/bin/func
           
           func start -p 7001 ./policy-manager-publish
           func start -p 7002 ./customer-data-publish
