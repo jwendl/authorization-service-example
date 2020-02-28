@@ -5,26 +5,22 @@ using ApiExampleProject.IntegrationTests.Configuration;
 
 namespace ApiExampleProject.IntegrationTests.TestFixtures
 {
-    public class IntegrationTestFixture
+    public abstract class BaseTestFixture
         : IDisposable
     {
         private readonly Process funcHostProcess;
 
-        public int Port { get; } = 7001;
-
-        public string FunctionApplicationPath { get; set; }
-
-        public IntegrationTestFixture()
+        public BaseTestFixture(string functionAppPath, int portNumber)
         {
             var functionHostPath = Environment.ExpandEnvironmentVariables(ConfigurationHelper.Settings.FunctionHostPath);
-            var functionAppFolder = Path.GetRelativePath(Directory.GetCurrentDirectory(), FunctionApplicationPath);
+            var functionAppFolder = Path.GetRelativePath(Directory.GetCurrentDirectory(), functionAppPath);
 
             funcHostProcess = new Process()
             {
                 StartInfo =
                 {
                     FileName = functionHostPath,
-                    Arguments = $"start -p {Port}",
+                    Arguments = $"start -p {portNumber}",
                     WorkingDirectory = functionAppFolder
                 }
             };
@@ -34,6 +30,8 @@ namespace ApiExampleProject.IntegrationTests.TestFixtures
             {
                 throw new InvalidOperationException(IntegrationTestResources.CouldNotStart_ErrorMessage);
             }
+
+            
         }
 
         public void Dispose()

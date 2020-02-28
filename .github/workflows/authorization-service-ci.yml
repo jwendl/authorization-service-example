@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      jwendl/*
 
 env:
   buildConfiguration: release
@@ -103,6 +104,15 @@ jobs:
         with:
           name: order-data-publish
           path: ./output/OrderSystem
+
+  runIntegrationTests:
+    runs-on: ubuntu-latest
+    needs: [ publishIntegrationTests ]
+    steps:
+      - name: Test with dotnet
+        run: dotnet test ./src/ApiExampleProject.sln --filter Category=Integration --configuration $buildConfiguration
+        env:
+          TokenCreator__ClientSecret: ${{ secrets.APP_CLIENT_SECRET }}
 
   deployTerraformScripts:
     runs-on: ubuntu-latest

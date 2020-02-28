@@ -31,8 +31,8 @@ namespace PolicyManager
             builder.Services.AddDataAccessDependencies(configuration);
             builder.Services.AddTokenValidatorDependencies(configuration);
             builder.Services.AddSingleton<IJsonHttpContentValidator, JsonHttpContentValidator>();
+            builder.Services.AddSingleton<IJsonTextSerializer, JsonTextSerializer>();
             builder.Services.AddScoped<IDocumentationRepository, DocumentationRepository>();
-            builder.Services.AddScoped<IJsonTextSerializer, JsonTextSerializer>();
         }
     }
 }

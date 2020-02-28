@@ -5,13 +5,13 @@
     "FUNCTIONS_WORKER_RUNTIME": "dotnet"
   },
   "TokenValidator": {
-    "Audience": "api://jw-example-api",
-    "TenantId": "",
-    "ClientId": ""
+    "Audience": "api://jwpolicymanager",
+    "TenantId": "1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378",
+    "ClientId": "0b861016-b56c-49b0-899a-b2e24537cb1d"
   },
   "TokenCreator": {
-    "TenantId": "",
-    "ClientId": "",
+    "TenantId": "1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378",
+    "ClientId": "0b861016-b56c-49b0-899a-b2e24537cb1d",
     "ClientSecret": "",
     "Scopes": "https://graph.microsoft.com/User.Read"
   },

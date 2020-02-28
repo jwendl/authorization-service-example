@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using ApiExampleProject.CustomerData.Client;
 using ApiExampleProject.CustomerData.Client.Extensions;
 using ApiExampleProject.CustomerData.DataAccess.Models;
-using ApiExampleProject.IntegrationTests.Configuration;
 using ApiExampleProject.IntegrationTests.TestFixtures;
 using Bogus;
 using FluentAssertions;
@@ -14,17 +13,13 @@ using Xunit;
 namespace ApiExampleProject.IntegrationTests
 {
     [Trait("Category", "SkipWhenLiveUnitTesting")]
-    [Collection(nameof(IntegrationTestCollection))]
+    [Collection(nameof(CustomerTestCollection))]
     public class CustomerFunctionsTests
     {
-        private readonly IntegrationTestFixture integrationTestFixture;
         private readonly IServiceProvider serviceProvider;
 
-        public CustomerFunctionsTests(IntegrationTestFixture integrationTestFixture)
+        public CustomerFunctionsTests()
         {
-            this.integrationTestFixture = integrationTestFixture ?? throw new ArgumentNullException(nameof(integrationTestFixture));
-            integrationTestFixture.FunctionApplicationPath = ConfigurationHelper.Settings.CustomerDataApplicationPath;
-
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Environment.CurrentDirectory)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)

@@ -17,9 +17,9 @@ namespace ApiExampleProject.CustomerData.Client.Extensions
         {
             _ = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
-            var clientConfiguration = new ClientConfiguration();
-            configuration.Bind("ClientConfiguration", clientConfiguration);
-            serviceCollection.Configure<ClientConfiguration>(cc => configuration.Bind("ClientConfiguration", cc));
+            var customerDataClientConfiguration = new ClientConfiguration();
+            configuration.Bind("CustomerDataClientConfiguration", customerDataClientConfiguration);
+            serviceCollection.Configure<ClientConfiguration>(cc => configuration.Bind("CustomerDataClientConfiguration", cc));
             serviceCollection.AddTokenCreatorDependencies(configuration);
 
             var asyncRetryPolicy = HttpPolicyExtensions.HandleTransientHttpError()
@@ -32,7 +32,7 @@ namespace ApiExampleProject.CustomerData.Client.Extensions
                 .AddPolicyHandler(asyncRetryPolicy)
                 .AddHttpMessageHandler<ServiceToServiceAuthenticationMessageHandler>()
                 .AddHttpMessageHandler<HttpLoggingHandler>()
-                .ConfigureHttpClient(http => http.BaseAddress = clientConfiguration.ApiServiceUri);
+                .ConfigureHttpClient(http => http.BaseAddress = customerDataClientConfiguration.ApiServiceUri);
 
             return serviceCollection;
         }

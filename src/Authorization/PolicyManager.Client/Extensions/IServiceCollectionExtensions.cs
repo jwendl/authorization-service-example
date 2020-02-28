@@ -17,9 +17,9 @@ namespace PolicyManager.Client.Extensions
         {
             _ = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
-            var clientConfiguration = new ClientConfiguration();
-            configuration.Bind("ClientConfiguration", clientConfiguration);
-            serviceCollection.Configure<ClientConfiguration>(cc => configuration.Bind("ClientConfiguration", cc));
+            var policyManagerClientConfiguration = new ClientConfiguration();
+            configuration.Bind("PolicyManagerClientConfiguration", policyManagerClientConfiguration);
+            serviceCollection.Configure<ClientConfiguration>(cc => configuration.Bind("PolicyManagerClientConfiguration", cc));
             serviceCollection.AddTokenCreatorDependencies(configuration);
 
             var asyncRetryPolicy = HttpPolicyExtensions.HandleTransientHttpError()
@@ -32,7 +32,7 @@ namespace PolicyManager.Client.Extensions
                 .AddPolicyHandler(asyncRetryPolicy)
                 .AddHttpMessageHandler<ServiceToServiceAuthenticationMessageHandler>()
                 .AddHttpMessageHandler<HttpLoggingHandler>()
-                .ConfigureHttpClient(http => http.BaseAddress = clientConfiguration.ApiServiceUri);
+                .ConfigureHttpClient(http => http.BaseAddress = policyManagerClientConfiguration.ApiServiceUri);
 
             return serviceCollection;
         }

@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>$(RepoDir)\Global.ruleset</CodeAnalysisRuleSet>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <ProjectGuid>{C29FE0E2-EE15-4EE5-80AB-170ED9F0E686}</ProjectGuid>
+    <ProjectGuid>{67574A98-5ECD-4A51-BCC9-532349D4E0E0}</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>
