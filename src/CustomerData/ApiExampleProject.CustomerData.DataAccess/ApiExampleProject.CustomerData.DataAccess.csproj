@@ -6,6 +6,7 @@
     <CodeAnalysisRuleSet>$(RepoDir)\Global.ruleset</CodeAnalysisRuleSet>
     <NeutralLanguage>en-US</NeutralLanguage>
     <ProjectGuid>{D7B94B96-749D-457A-B186-62545EF97231}</ProjectGuid>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

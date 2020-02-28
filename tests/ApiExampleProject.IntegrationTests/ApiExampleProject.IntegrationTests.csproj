@@ -4,12 +4,15 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsPackable>false</IsPackable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>$(RepoDir)\Global.ruleset</CodeAnalysisRuleSet>
     <NeutralLanguage>en-US</NeutralLanguage>
     <ProjectGuid>{F0B5C28D-0364-4CBD-9788-75DCC4FEBF53}</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ApiExampleProject.Authentication" Version="1.0.0" />
+    <PackageReference Include="ApiExampleProject.Common" Version="1.0.0" />
+    <PackageReference Include="ApiExampleProject.CustomerData.Client" Version="1.0.0" />
+    <PackageReference Include="ApiExampleProject.CustomerData.DataAccess" Version="1.0.0" />
     <PackageReference Include="Bogus" Version="29.0.1" />
     <PackageReference Include="FluentAssertions" Version="5.10.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
@@ -21,18 +24,13 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="PolicyManager.Client" Version="1.0.0" />
+    <PackageReference Include="PolicyManager.DataAccess" Version="1.0.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="$(RepoDir)\OrderSystem\ApiExampleProject.OrderSystem.Client\ApiExampleProject.OrderSystem.Client.csproj" />
-    <ProjectReference Include="$(RepoDir)\CustomerData\ApiExampleProject.CustomerData.Client\ApiExampleProject.CustomerData.Client.csproj" />
-    <ProjectReference Include="$(RepoDir)\CustomerData\ApiExampleProject.CustomerData.DataAccess\ApiExampleProject.CustomerData.DataAccess.csproj" />
-    <ProjectReference Include="$(RepoDir)\Authorization\PolicyManager.Client\PolicyManager.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>

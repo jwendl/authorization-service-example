@@ -112,22 +112,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Install Functions Tooling
-        run: |
-          pushd tools
-          npm i azure-functions-core-tools@3 --unsafe-perm true
-          popd
-
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 3.1.101
-
-      - name: Build with dotnet
-        run: dotnet build ./src/ApiExampleProject.sln --configuration $buildConfiguration
-
       - name: Test with dotnet
-        run: dotnet test ./src/ApiExampleProject.sln --filter Category=Integration --configuration $buildConfiguration
+        run: |
+          ./run-tests.sh
+        working-directory: ./tests/
         env:
           TokenCreator__ClientSecret: ${{ secrets.APP_CLIENT_SECRET }}
 
