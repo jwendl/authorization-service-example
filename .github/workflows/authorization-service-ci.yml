@@ -119,8 +119,12 @@ jobs:
 
       - name: Test with dotnet
         run: |
-          chmod +x run-tests.sh
-          ./run-tests.sh
+          dotnet publish ./ApiExampleProject.IntegrationTests.sln --output ./output/
+          pushd output
+          npm i azure-functions-core-tools@3 --unsafe-perm true
+          chmod +x ./node_modules/azure-functions-core-tools/bin/func
+          dotnet vstest ApiExampleProject.IntegrationTests.dll --logger:"trx;LogFileName=integration-results.trx"
+          popd
         working-directory: ./tests/
         env:
           TokenCreator__ClientSecret: ${{ secrets.APP_CLIENT_SECRET }}
