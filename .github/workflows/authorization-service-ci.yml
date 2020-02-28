@@ -119,6 +119,7 @@ jobs:
 
       - name: Test with dotnet
         run: |
+          chmod +x run-tests.sh
           ./run-tests.sh
         working-directory: ./tests/
         env:
