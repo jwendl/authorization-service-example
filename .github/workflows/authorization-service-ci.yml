@@ -107,8 +107,11 @@ jobs:
 
   runIntegrationTests:
     runs-on: ubuntu-latest
-    needs: [ build, credScan ]
+    needs: [ publishAuthorizationServiceApi, publishCustomerDataServiceApi, publishOrderDataServiceApi ]
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+            
       - name: Test with dotnet
         run: dotnet test ./src/ApiExampleProject.sln --filter Category=Integration --configuration $buildConfiguration
         env:
@@ -116,7 +119,7 @@ jobs:
 
   deployTerraformScripts:
     runs-on: ubuntu-latest
-    needs: [ publishAuthorizationServiceApi, publishCustomerDataServiceApi, publishOrderDataServiceApi ]
+    needs: [ runIntegrationTests ]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
