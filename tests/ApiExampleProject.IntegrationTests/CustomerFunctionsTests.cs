@@ -1,19 +1,17 @@
-﻿using System;
-using System.Threading.Tasks;
-using ApiExampleProject.CustomerData.Client;
+﻿using ApiExampleProject.CustomerData.Client;
 using ApiExampleProject.CustomerData.Client.Extensions;
 using ApiExampleProject.CustomerData.DataAccess.Models;
-using ApiExampleProject.IntegrationTests.TestFixtures;
 using Bogus;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace ApiExampleProject.IntegrationTests
 {
     [Trait("Category", "SkipWhenLiveUnitTesting")]
-    [Collection(nameof(CustomerTestCollection))]
     public class CustomerFunctionsTests
     {
         private readonly IServiceProvider serviceProvider;

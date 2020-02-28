@@ -1,17 +1,15 @@
-﻿using System;
-using System.Threading.Tasks;
-using ApiExampleProject.IntegrationTests.TestFixtures;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PolicyManager.Client;
 using PolicyManager.Client.Extensions;
+using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace ApiExampleProject.IntegrationTests
 {
     [Trait("Category", "SkipWhenLiveUnitTesting")]
-    [Collection(nameof(PolicyManagerTestCollection))]
     public class PolicyManagerTests
     {
         private readonly IServiceProvider serviceProvider;
