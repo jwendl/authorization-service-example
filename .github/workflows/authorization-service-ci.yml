@@ -135,9 +135,10 @@ jobs:
       - name: Test with dotnet
         run: |
           dotnet publish ./ApiExampleProject.IntegrationTests.sln --output ./output/
-          cp -R ./policy-manager-publish .
-          cp -R ./customer-data-publish .
-          cp -R ./order-data-publish .
+          cp -R ./policy-manager-publish ./output
+          cp -R ./customer-data-publish ./output
+          cp -R ./order-data-publish ./output
+          
           pushd output
           npm i azure-functions-core-tools@3 --unsafe-perm true
           chmod +x ./node_modules/azure-functions-core-tools/bin/func
