@@ -107,7 +107,7 @@ jobs:
 
   runIntegrationTests:
     runs-on: ubuntu-latest
-    needs: [ publishIntegrationTests ]
+    needs: [ build, credScan ]
     steps:
       - name: Test with dotnet
         run: dotnet test ./src/ApiExampleProject.sln --filter Category=Integration --configuration $buildConfiguration
