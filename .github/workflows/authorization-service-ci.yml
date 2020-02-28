@@ -111,7 +111,15 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-            
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
+
+      - name: Build with dotnet
+        run: dotnet build ./src/ApiExampleProject.sln --configuration $buildConfiguration
+
       - name: Test with dotnet
         run: dotnet test ./src/ApiExampleProject.sln --filter Category=Integration --configuration $buildConfiguration
         env:
