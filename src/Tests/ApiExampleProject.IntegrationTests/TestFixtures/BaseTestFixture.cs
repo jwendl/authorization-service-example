@@ -12,8 +12,10 @@ namespace ApiExampleProject.IntegrationTests.TestFixtures
 
         public BaseTestFixture(string functionAppPath, int portNumber)
         {
-            var functionHostPath = Environment.ExpandEnvironmentVariables(ConfigurationHelper.Settings.FunctionHostPath);
-            var functionAppFolder = Path.GetRelativePath(Directory.GetCurrentDirectory(), functionAppPath);
+            _ = functionAppPath ?? throw new ArgumentNullException(nameof(functionAppPath));
+
+            var functionHostPath = ConfigurationHelper.Settings.FunctionHostPath.Replace('|', Path.DirectorySeparatorChar);
+            var functionAppFolder = Path.GetRelativePath(Directory.GetCurrentDirectory(), functionAppPath.Replace('|', Path.DirectorySeparatorChar));
 
             funcHostProcess = new Process()
             {
