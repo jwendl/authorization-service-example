@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      jwendl/*
+      - jwendl/*
 
 env:
   buildConfiguration: release
