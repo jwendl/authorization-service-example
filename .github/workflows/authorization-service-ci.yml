@@ -114,7 +114,9 @@ jobs:
 
       - name: Install Functions Tooling
         run: |
-          npm i -g azure-functions-core-tools@3 --unsafe-perm true
+          pushd tools
+          npm i azure-functions-core-tools@3 --unsafe-perm true
+          popd
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
