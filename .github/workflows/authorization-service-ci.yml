@@ -135,6 +135,7 @@ jobs:
       - name: Test with dotnet
         run: |
           ls .
+          ls ./policy-manager-publish/
 
           pushd ./tests/
           dotnet publish ./ApiExampleProject.IntegrationTests.sln --output ./output/
