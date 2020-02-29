@@ -134,7 +134,6 @@ jobs:
 
       - name: Test with dotnet
         run: |
-          ls .
           ls ./policy-manager-publish/
 
           pushd ./tests/
@@ -144,6 +143,7 @@ jobs:
           npm i azure-functions-core-tools@3 --unsafe-perm true
           chmod +x ./node_modules/azure-functions-core-tools/bin/func
           
+          pwd
           ./node_modules/azure-functions-core-tools/bin/func start -p 7001 ../../policy-manager-publish
           ./node_modules/azure-functions-core-tools/bin/func start -p 7002 ../../customer-data-publish
           ./node_modules/azure-functions-core-tools/bin/func start -p 7003 ../../order-data-publish
