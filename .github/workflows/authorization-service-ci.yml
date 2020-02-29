@@ -134,6 +134,10 @@ jobs:
 
       - name: Test with dotnet
         run: |
+          ls ../
+          ls ../../
+          ls ../../../
+
           pushd ./tests/
           dotnet publish ./ApiExampleProject.IntegrationTests.sln --output ./output/
 
