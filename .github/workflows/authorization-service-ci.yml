@@ -134,18 +134,16 @@ jobs:
 
       - name: Test with dotnet
         run: |
+          pushd ./tests/
           dotnet publish ./ApiExampleProject.IntegrationTests.sln --output ./output/
-          cp -R ../policy-manager-publish ./output
-          cp -R ../customer-data-publish ./output
-          cp -R ../order-data-publish ./output
 
-          pushd output
+          pushd ./output/
           npm i azure-functions-core-tools@3 --unsafe-perm true
           chmod +x ./node_modules/azure-functions-core-tools/bin/func
           
-          ./node_modules/azure-functions-core-tools/bin/func start -p 7001 ./policy-manager-publish
-          ./node_modules/azure-functions-core-tools/bin/func start -p 7002 ./customer-data-publish
-          ./node_modules/azure-functions-core-tools/bin/func start -p 7003 ./order-data-publish
+          ./node_modules/azure-functions-core-tools/bin/func start -p 7001 ../../policy-manager-publish
+          ./node_modules/azure-functions-core-tools/bin/func start -p 7002 ../../customer-data-publish
+          ./node_modules/azure-functions-core-tools/bin/func start -p 7003 ../../order-data-publish
 
           sudo apt-get install httping -y
           while ! httping -qc1 http://localhost:7001 ; do sleep 1 ; done
@@ -154,7 +152,7 @@ jobs:
 
           dotnet vstest ApiExampleProject.IntegrationTests.dll --logger:"trx;LogFileName=integration-results.trx"
           popd
-        working-directory: ./tests/
+          popd
         env:
           TokenCreator__ClientSecret: ${{ secrets.APP_CLIENT_SECRET }}
 
