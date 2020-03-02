@@ -162,10 +162,13 @@ jobs:
           popd
           popd
         env:
+          TokenCreator__TenantId: 1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378
           TokenCreator__ClientId: 0b861016-b56c-49b0-899a-b2e24537cb1d
           TokenCreator__ClientSecret: ${{ secrets.APP_CLIENT_SECRET }}
           TokenCreator__Scopes: api://jwpolicymanager/.default
-          TokenCreator__TenantId: 1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378
+          TokenValidator__Audience: api://jwpolicymanager
+          TokenValidator__TenantId: 1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378
+          TokenValidator__ClientId: 0b861016-b56c-49b0-899a-b2e24537cb1d
 
   deployTerraformScripts:
     runs-on: ubuntu-latest
