@@ -73,9 +73,6 @@ namespace ApiExampleProject.Authentication
             ClaimsPrincipal claimsPrincipal = null;
             try
             {
-                logger.LogInformation(tokenValidatorConfiguration.Audience);
-                logger.LogInformation(tokenValidatorConfiguration.Authority);
-                logger.LogInformation(tokenValidatorConfiguration.ClientId);
                 claimsPrincipal = securityTokenValidator.ValidateToken(token, ValidationParameters, out _);
             }
             catch (SecurityTokenException ex)
