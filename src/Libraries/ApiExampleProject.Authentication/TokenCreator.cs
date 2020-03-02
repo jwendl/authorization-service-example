@@ -7,6 +7,7 @@ using ApiExampleProject.Common.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
+using Microsoft.IdentityModel.Logging;
 
 namespace ApiExampleProject.Authentication
 {
@@ -30,6 +31,7 @@ namespace ApiExampleProject.Authentication
                 .WithAuthority(AzureCloudInstance.AzurePublic, tokenCreatorConfiguration.TenantId)
                 .Build();
 
+            IdentityModelEventSource.ShowPII = true;
             this.logger = logger;
         }
 
