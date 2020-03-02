@@ -56,16 +56,16 @@ namespace ApiExampleProject.Authentication
 
             if (ValidationParameters == null)
             {
-                var openIdConnectConfiguration = await configurationManager.GetConfigurationAsync(CancellationToken.None);
+                //var openIdConnectConfiguration = await configurationManager.GetConfigurationAsync(CancellationToken.None);
                 ValidationParameters = new TokenValidationParameters()
                 {
-                    IssuerSigningKeys = openIdConnectConfiguration.SigningKeys,
-                    RequireSignedTokens = true,
+                    //IssuerSigningKeys = openIdConnectConfiguration.SigningKeys,
+                    RequireSignedTokens = false,
                     ValidAudiences = tokenValidatorConfiguration.ValidAudiences,
                     ValidateAudience = true,
                     ValidIssuers = tokenValidatorConfiguration.ValidIssuers,
                     ValidateIssuer = true,
-                    ValidateIssuerSigningKey = true,
+                    ValidateIssuerSigningKey = false,
                     ValidateLifetime = true,
                 };
             }
@@ -80,7 +80,7 @@ namespace ApiExampleProject.Authentication
                 logger.LogError(ex.Message);
             }
 
-            return claimsPrincipal;
+            return await Task.FromResult(claimsPrincipal);
         }
     }
 }
