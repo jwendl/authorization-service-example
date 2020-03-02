@@ -134,8 +134,6 @@ jobs:
 
       - name: Test with dotnet
         run: |
-          ls ./policy-manager-publish/
-
           pushd ./tests/
           dotnet publish ./ApiExampleProject.IntegrationTests.sln --output ./output/
 
@@ -144,15 +142,15 @@ jobs:
           chmod +x ./node_modules/azure-functions-core-tools/bin/func
           
           pushd ../../policy-manager-publish
-          ../tests/output/node_modules/azure-functions-core-tools/bin/func start -p 7001 &
+          ../tests/output/node_modules/azure-functions-core-tools/bin/func start --csharp -p 7001 &
           popd
 
           pushd ../../customer-data-publish
-          ../tests/output/node_modules/azure-functions-core-tools/bin/func start -p 7002 &
+          ../tests/output/node_modules/azure-functions-core-tools/bin/func start --csharp -p 7002 &
           popd
           
           pushd ../../order-data-publish
-          ../tests/output/node_modules/azure-functions-core-tools/bin/func start -p 7003 &
+          ../tests/output/node_modules/azure-functions-core-tools/bin/func start --csharp -p 7003 &
           popd
 
           sudo apt-get install httping -y
