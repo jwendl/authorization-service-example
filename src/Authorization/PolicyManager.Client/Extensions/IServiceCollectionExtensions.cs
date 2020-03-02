@@ -9,7 +9,7 @@ using Polly;
 using Polly.Extensions.Http;
 using Refit;
 
-namespace ApiExampleProject.CustomerData.Client.Extensions
+namespace PolicyManager.Client.Extensions
 {
     public static class IServiceCollectionExtensions
     {
@@ -17,9 +17,9 @@ namespace ApiExampleProject.CustomerData.Client.Extensions
         {
             _ = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
-            var customerDataClientConfiguration = new ClientConfiguration();
-            configuration.Bind("CustomerDataClientConfiguration", customerDataClientConfiguration);
-            serviceCollection.Configure<ClientConfiguration>(cc => configuration.Bind("CustomerDataClientConfiguration", cc));
+            var policyManagerClientConfiguration = new ClientConfiguration();
+            configuration.Bind("PolicyManagerClientConfiguration", policyManagerClientConfiguration);
+            serviceCollection.Configure<ClientConfiguration>(cc => configuration.Bind("PolicyManagerClientConfiguration", cc));
             serviceCollection.AddTokenCreatorDependencies(configuration);
 
             var asyncRetryPolicy = HttpPolicyExtensions.HandleTransientHttpError()
@@ -28,11 +28,11 @@ namespace ApiExampleProject.CustomerData.Client.Extensions
             serviceCollection.AddSingleton<HttpLoggingHandler>();
             serviceCollection.AddSingleton<ServiceToServiceAuthenticationMessageHandler>();
 
-            serviceCollection.AddRefitClient<ICustomerServiceClient>()
+            serviceCollection.AddRefitClient<IPolicyManagerServiceClient>()
                 .AddPolicyHandler(asyncRetryPolicy)
                 .AddHttpMessageHandler<ServiceToServiceAuthenticationMessageHandler>()
                 .AddHttpMessageHandler<HttpLoggingHandler>()
-                .ConfigureHttpClient(http => http.BaseAddress = customerDataClientConfiguration.ApiServiceUri);
+                .ConfigureHttpClient(http => http.BaseAddress = policyManagerClientConfiguration.ApiServiceUri);
 
             return serviceCollection;
         }

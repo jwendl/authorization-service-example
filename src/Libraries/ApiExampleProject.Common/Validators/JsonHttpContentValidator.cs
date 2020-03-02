@@ -8,26 +8,31 @@ using ApiExampleProject.Common.Interfaces;
 using ApiExampleProject.Common.Models;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace ApiExampleProject.Common.Validators
 {
     public class JsonHttpContentValidator
         : IJsonHttpContentValidator
     {
+        private readonly IJsonTextSerializer jsonTextSerializer;
         private readonly ILogger<JsonHttpContentValidator> logger;
 
-        public JsonHttpContentValidator(ILogger<JsonHttpContentValidator> logger)
+        public JsonHttpContentValidator(IJsonTextSerializer jsonTextSerializer, ILogger<JsonHttpContentValidator> logger)
         {
+            this.jsonTextSerializer = jsonTextSerializer;
             this.logger = logger;
         }
 
         public async Task<JsonValidationResult<TModel>> ValidateJsonAsync<TModel, TValidator>(HttpContent httpContent)
             where TValidator : AbstractValidator<TModel>, new()
         {
+            _ = httpContent ?? throw new ArgumentNullException(nameof(httpContent));
+
             try
             {
-                var result = await httpContent.ReadAsAsync<TModel>();
+                var contentStream = await httpContent.ReadAsStreamAsync();
+                var result = await jsonTextSerializer.DeserializeObjectAsync<TModel>(contentStream);
+
                 if (result == null)
                 {
                     var content = new StringContent($"Invalid json, please visit the swagger definition and retry the request.", Encoding.UTF8, ContentTypes.Application.Json);
@@ -62,30 +67,6 @@ namespace ApiExampleProject.Common.Validators
                         Message = httpResponseMessage,
                     };
                 }
-            }
-            catch (JsonReaderException jsonReaderException)
-            {
-                logger.LogError(jsonReaderException.Message, jsonReaderException);
-
-                var content = new StringContent($"Invalid json, error from JsonReader: {jsonReaderException.Message}.", Encoding.UTF8, ContentTypes.Application.Json);
-                var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = content };
-                return new JsonValidationResult<TModel>()
-                {
-                    IsValid = false,
-                    Message = httpResponseMessage,
-                };
-            }
-            catch (JsonSerializationException jsonSerializationException)
-            {
-                logger.LogError(jsonSerializationException.Message, jsonSerializationException);
-
-                var content = new StringContent($"Invalid json, error from JsonSerializationException: {jsonSerializationException.Message}.", Encoding.UTF8, ContentTypes.Application.Json);
-                var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = content };
-                return new JsonValidationResult<TModel>()
-                {
-                    IsValid = false,
-                    Message = httpResponseMessage,
-                };
             }
             catch (UnsupportedMediaTypeException unsupportedMediaTypeException)
             {

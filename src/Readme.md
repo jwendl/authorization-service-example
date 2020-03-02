@@ -31,5 +31,6 @@ The goal is to allow for "Clone and F5" functionality. So everything here doesn'
 
 ## Research Topics
 
-Look at https://github.com/yorek/locust-on-azure
-Look at https://github.com/cypress-io/github-action
+- Look at https://github.com/yorek/locust-on-azure for Performance Testing
+- Look at https://github.com/cypress-io/github-action for UI Testing
+- Still need to find something for automated API Testing (smoke testing)

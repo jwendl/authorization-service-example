@@ -57,7 +57,6 @@ namespace ApiExampleProject.Authentication
             if (ValidationParameters == null)
             {
                 var openIdConnectConfiguration = await configurationManager.GetConfigurationAsync(CancellationToken.None);
-
                 ValidationParameters = new TokenValidationParameters()
                 {
                     IssuerSigningKeys = openIdConnectConfiguration.SigningKeys,

@@ -1,6 +1,7 @@
 ﻿using System;
 using ApiExampleProject.Authentication.Extensions;
 using ApiExampleProject.Common.Interfaces;
+using ApiExampleProject.Common.Serializers;
 using ApiExampleProject.Common.Validators;
 using ApiExampleProject.CustomerData;
 using ApiExampleProject.CustomerData.DataAccess.Extensions;
@@ -30,6 +31,7 @@ namespace ApiExampleProject.CustomerData
             builder.Services.AddDataAccessDependencies(configuration);
             builder.Services.AddTokenValidatorDependencies(configuration);
             builder.Services.AddSingleton<IJsonHttpContentValidator, JsonHttpContentValidator>();
+            builder.Services.AddSingleton<IJsonTextSerializer, JsonTextSerializer>();
             builder.Services.AddScoped<IDocumentationRepository, DocumentationRepository>();
         }
     }

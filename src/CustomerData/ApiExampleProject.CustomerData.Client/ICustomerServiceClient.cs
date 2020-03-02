@@ -8,6 +8,6 @@ namespace ApiExampleProject.CustomerData.Client
     {
         [Headers("Authorization: Bearer")]
         [Post("/api/customers")]
-        Task<Customer> CreateCustomerAsync(Customer customer);
+        Task<Customer> CreateCustomerAsync([Body] Customer customer);
     }
 }
