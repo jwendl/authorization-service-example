@@ -1,25 +1,19 @@
-﻿namespace PolicyManager.DataAccess.Models
+﻿using System.Text.Json.Serialization;
+
+namespace PolicyManager.DataAccess.Models
 {
     public class PolicyResult
     {
-        /// <summary>
-        /// The name of the policy.
-        /// </summary>
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        /// <summary>
-        /// The description of the policy.
-        /// </summary>
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        /// <summary>
-        /// The result either Allow or Deny.
-        /// </summary>
+        [JsonPropertyName("result")]
         public PolicyEvaluation Result { get; set; }
 
-        /// <summary>
-        /// The result in string format.
-        /// </summary>
+        [JsonPropertyName("resultString")]
         public string ResultString
         {
             get

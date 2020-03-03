@@ -6,10 +6,13 @@ namespace PolicyManager.DataAccess.Models
     public class Thing
         : BaseDatabaseModel
     {
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
+        [JsonPropertyName("identifier")]
         public string Identifier { get; set; }
 
         [JsonIgnore]

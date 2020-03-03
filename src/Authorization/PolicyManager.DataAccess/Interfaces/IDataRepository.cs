@@ -14,13 +14,15 @@ namespace PolicyManager.DataAccess.Interfaces
 
         Task<IEnumerable<T>> ReadAllAsync();
 
-        Task<IEnumerable<T>> ReadAllAsync(params Expression<Func<T, bool>>[] includes);
+        Task<IEnumerable<T>> ReadAllAsync(params Expression<Func<T, object>>[] includes);
 
         Task<IEnumerable<T>> ReadAllAsync(PaginationRequest paginationRequest);
 
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> queryExpression);
 
-        Task<T> FindSingleAndIncludeAsync<TP>(Expression<Func<T, bool>> queryExpression, params Expression<Func<T, TP>>[] includes);
+        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> queryExpression, params Expression<Func<T, object>>[] includes);
+
+        Task<T> FindSingleAndIncludeAsync(Expression<Func<T, bool>> queryExpression, params Expression<Func<T, object>>[] includes);
 
         Task<T> ReadItemAsync(Guid id);
 
