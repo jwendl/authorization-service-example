@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PolicyManager.Client;
 using PolicyManager.Client.Extensions;
+using PolicyManager.DataAccess.Models;
 using System;
 using System.Threading.Tasks;
 using Xunit;
@@ -34,6 +35,24 @@ namespace ApiExampleProject.IntegrationTests
             var policyManagerClient = serviceProvider.GetRequiredService<IPolicyManagerServiceClient>();
             var things = await policyManagerClient.GetThingsAsync();
             things.Should().BeEmpty();
+        }
+
+        [Fact]
+        [Trait("Category", "Integration")]
+        public async Task CreateThing()
+        {
+            var policyManagerClient = serviceProvider.GetRequiredService<IPolicyManagerServiceClient>();
+            var thing = new Thing()
+            {
+                Name = "Test Thing",
+                Identifier = "/api/test",
+                Description = "This is for integration testing.",
+            };
+
+            var createdThing = await policyManagerClient.CreateThingAsync(thing);
+            createdThing.Name.Should().Be(thing.Name);
+            createdThing.Identifier.Should().Be(thing.Identifier);
+            createdThing.Description.Should().Be(thing.Description);
         }
     }
 }

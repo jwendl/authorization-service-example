@@ -10,5 +10,9 @@ namespace PolicyManager.Client
         [Headers("Authorization: Bearer")]
         [Get("/api/things")]
         Task<IEnumerable<Thing>> GetThingsAsync();
+
+        [Headers("Authorization: Bearer")]
+        [Get("/api/things")]
+        Task<Thing> CreateThingAsync([Body] Thing thing);
     }
 }
