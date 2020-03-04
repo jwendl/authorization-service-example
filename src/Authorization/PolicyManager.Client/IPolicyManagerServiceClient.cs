@@ -14,5 +14,17 @@ namespace PolicyManager.Client
         [Headers("Authorization: Bearer")]
         [Post("/api/things")]
         Task<Thing> CreateThingAsync([Body] Thing thing);
+
+        [Headers("Authorization: Bearer")]
+        [Post("/api/thingAttributes")]
+        Task<ThingAttribute> CreateThingAttributeAsync([Body] ThingAttribute thingAttribute);
+
+        [Headers("Authorization: Bearer")]
+        [Post("/api/thingPolicies")]
+        Task<ThingPolicy> CreateThingPoliciesAsync([Body] ThingPolicy thingPolicy);
+
+        [Headers("Authorization: Bearer")]
+        [Post("/api/checkAccess")]
+        Task<IEnumerable<PolicyResult>> CheckAccessAsync([Body] CheckAccessRequest checkAccessRequest);
     }
 }

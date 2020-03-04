@@ -16,7 +16,6 @@ using Microsoft.Graph;
 using Microsoft.OpenApi.Models;
 using PolicyManager.DataAccess.Interfaces;
 using PolicyManager.DataAccess.Models;
-using PolicyManager.Models;
 using PolicyManager.Resources;
 using PolicyManager.Validators;
 

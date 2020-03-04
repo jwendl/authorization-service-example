@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace PolicyManager.Models
+namespace PolicyManager.DataAccess.Models
 {
     public class CheckAccessRequest
     {
