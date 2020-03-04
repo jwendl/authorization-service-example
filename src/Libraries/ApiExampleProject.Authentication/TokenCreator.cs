@@ -14,23 +14,21 @@ namespace ApiExampleProject.Authentication
     public class TokenCreator
         : ITokenCreator
     {
-        private readonly IConfidentialClientApplication confidentialClientApplication;
         private readonly TokenCreatorConfiguration tokenCreatorConfiguration;
+        private readonly IConfidentialClientApplication confidentialClientApplication;
         private readonly ILogger<TokenCreator> logger;
 
-        public TokenCreator(IOptions<TokenCreatorConfiguration> options, ILogger<TokenCreator> logger)
+        public TokenCreator(IOptions<TokenCreatorConfiguration> options, AbstractApplicationBuilder<ConfidentialClientApplicationBuilder> abstractApplicationBuilder, ILogger<TokenCreator> logger)
         {
             _ = options ?? throw new ArgumentNullException(nameof(options));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _ = abstractApplicationBuilder ?? throw new ArgumentNullException(nameof(abstractApplicationBuilder));
 
             tokenCreatorConfiguration = options.Value;
-            confidentialClientApplication = ConfidentialClientApplicationBuilder
-                .Create(tokenCreatorConfiguration.ClientId)
-                .WithClientSecret(tokenCreatorConfiguration.ClientSecret)
-                .WithAuthority(AzureCloudInstance.AzurePublic, tokenCreatorConfiguration.TenantId)
+            confidentialClientApplication = abstractApplicationBuilder
+                .WithTenantId(tokenCreatorConfiguration.TenantId.ToString())
                 .Build();
 
-            this.logger = logger;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<string> GetAccessTokenAsync()

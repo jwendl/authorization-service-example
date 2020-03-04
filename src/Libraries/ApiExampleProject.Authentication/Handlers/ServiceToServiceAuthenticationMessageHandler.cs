@@ -25,8 +25,14 @@ namespace ApiExampleProject.Authentication.Handlers
 
             // If you have the following attribute in your interface, the authorization header will be "Bearer", not null.
             // [Headers("Authorization: Bearer")]
+            // If we have a token, then we want to use that token - otherwise generate a service to service one.
             var authenticationHeaderValue = httpRequestHeaders.Authorization;
-            if (authenticationHeaderValue != null)
+            if (authenticationHeaderValue != null && authenticationHeaderValue.Scheme == "Bearer" && !string.IsNullOrWhiteSpace(authenticationHeaderValue.Parameter))
+            {
+                var accessToken = await tokenCreator.GetAccessTokenOnBehalfOf(authenticationHeaderValue.Parameter);
+                httpRequestHeaders.Authorization = new AuthenticationHeaderValue(authenticationHeaderValue.Scheme, accessToken);
+            }
+            else
             {
                 var accessToken = await tokenCreator.GetAccessTokenAsync();
                 httpRequestHeaders.Authorization = new AuthenticationHeaderValue(authenticationHeaderValue.Scheme, accessToken);
