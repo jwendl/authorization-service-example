@@ -176,7 +176,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: policy-manager-publish
-          path: ./output/integration-results.trx
+          path: ./output/TestResults/integration-results.trx
 
   deployTerraformScripts:
     runs-on: ubuntu-latest
