@@ -161,6 +161,13 @@ jobs:
           dotnet vstest ApiExampleProject.IntegrationTests.dll --logger:"trx;LogFileName=integration-results.trx"
           popd
           popd
+
+      - name: Upload to Publish Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: policy-manager-publish
+          path: ./tests/output/integration-results.trx
+
         env:
           TokenCreator__TenantId: 1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378
           TokenCreator__ClientId: 0b861016-b56c-49b0-899a-b2e24537cb1d
@@ -169,6 +176,8 @@ jobs:
           TokenValidator__Audience: api://jwpolicymanager
           TokenValidator__TenantId: 1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378
           TokenValidator__ClientId: 0b861016-b56c-49b0-899a-b2e24537cb1d
+          PolicyManagerClientConfiguration__ApiServiceUri: http://localhost:7001/
+          CustomerDataClientConfiguration__ApiServiceUri: http://localhost:7002/
 
   deployTerraformScripts:
     runs-on: ubuntu-latest
