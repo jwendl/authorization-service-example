@@ -134,23 +134,24 @@ jobs:
 
       - name: Test with dotnet
         run: |
-          pushd ./tests/
-          dotnet publish ./ApiExampleProject.IntegrationTests.sln --output ./output/
+          pushd ./src/IntegrationTests/ApiExampleProject.IntegrationTests
+          dotnet publish ./ApiExampleProject.IntegrationTests.csproj --output ../../../output/
+          popd
 
           pushd ./output/
           npm i azure-functions-core-tools@3 --unsafe-perm true
           chmod +x ./node_modules/azure-functions-core-tools/bin/func
           
-          pushd ../../policy-manager-publish
-          ../tests/output/node_modules/azure-functions-core-tools/bin/func start --csharp -p 7001 &
+          pushd ../policy-manager-publish
+          ../output/node_modules/azure-functions-core-tools/bin/func start --csharp -p 7001 &
           popd
 
-          pushd ../../customer-data-publish
-          ../tests/output/node_modules/azure-functions-core-tools/bin/func start --csharp -p 7002 &
+          pushd ../customer-data-publish
+          ../output/node_modules/azure-functions-core-tools/bin/func start --csharp -p 7002 &
           popd
           
-          pushd ../../order-data-publish
-          ../tests/output/node_modules/azure-functions-core-tools/bin/func start --csharp -p 7003 &
+          pushd ../order-data-publish
+          ../output/node_modules/azure-functions-core-tools/bin/func start --csharp -p 7003 &
           popd
 
           sudo apt-get install httping -y
@@ -166,7 +167,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: policy-manager-publish
-          path: ./tests/output/integration-results.trx
+          path: ./output/integration-results.trx
 
         env:
           TokenCreator__TenantId: 1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378
