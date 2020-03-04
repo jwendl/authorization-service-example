@@ -170,15 +170,15 @@ jobs:
           path: ./output/integration-results.trx
 
         env:
-          TokenCreator__TenantId: 1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378
-          TokenCreator__ClientId: 0b861016-b56c-49b0-899a-b2e24537cb1d
-          TokenCreator__ClientSecret: ${{ secrets.APP_CLIENT_SECRET }}
-          TokenCreator__Scopes: api://jwpolicymanager/.default
-          TokenValidator__Audience: api://jwpolicymanager
-          TokenValidator__TenantId: 1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378
-          TokenValidator__ClientId: 0b861016-b56c-49b0-899a-b2e24537cb1d
-          PolicyManagerClientConfiguration__ApiServiceUri: http://localhost:7001/
-          CustomerDataClientConfiguration__ApiServiceUri: http://localhost:7002/
+          TokenCreator:TenantId: 1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378
+          TokenCreator:ClientId: 0b861016-b56c-49b0-899a-b2e24537cb1d
+          TokenCreator:ClientSecret: ${{ secrets.APP_CLIENT_SECRET }}
+          TokenCreator:Scopes: api://jwpolicymanager/.default
+          TokenValidator:Audience: api://jwpolicymanager
+          TokenValidator:TenantId: 1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378
+          TokenValidator:ClientId: 0b861016-b56c-49b0-899a-b2e24537cb1d
+          PolicyManagerClientConfiguration:ApiServiceUri: http://localhost:7001/
+          CustomerDataClientConfiguration:ApiServiceUri: http://localhost:7002/
 
   deployTerraformScripts:
     runs-on: ubuntu-latest
