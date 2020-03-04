@@ -7,7 +7,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <ProjectGuid>{67574A98-5ECD-4A51-BCC9-532349D4E0E0}</ProjectGuid>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
