@@ -31,15 +31,6 @@ namespace ApiExampleProject.IntegrationTests
 
         [Fact]
         [Trait("Category", "Integration")]
-        public async Task ReadThings()
-        {
-            var policyManagerClient = serviceProvider.GetRequiredService<IPolicyManagerServiceClient>();
-            var things = await policyManagerClient.GetThingsAsync();
-            things.Should().BeEmpty();
-        }
-
-        [Fact]
-        [Trait("Category", "Integration")]
         public async Task CreateThing()
         {
             var policyManagerClient = serviceProvider.GetRequiredService<IPolicyManagerServiceClient>();

@@ -48,6 +48,15 @@ namespace ApiExampleProject.Authentication.Extensions
                     .WithClientSecret(tokenCreatorConfiguration.ClientSecret)
                     .WithAuthority(AzureCloudInstance.AzurePublic, tokenCreatorConfiguration.TenantId);
             });
+            serviceCollection.AddSingleton<AbstractApplicationBuilder<PublicClientApplicationBuilder>, PublicClientApplicationBuilder>((sp) =>
+            {
+                var options = sp.GetRequiredService<IOptions<TokenCreatorConfiguration>>();
+                var tokenCreatorConfiguration = options.Value;
+
+                return PublicClientApplicationBuilder
+                    .Create(tokenCreatorConfiguration.ClientId)
+                    .WithAuthority(AzureCloudInstance.AzurePublic, tokenCreatorConfiguration.TenantId);
+            });
 
             return serviceCollection;
         }

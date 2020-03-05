@@ -11,5 +11,9 @@ namespace ApiExampleProject.Common.Configuration
         public string Scopes { get; set; }
 
         public Guid TenantId { get; set; }
+
+        public string TestUsername { get; set; }
+
+        public string TestPassword { get; set; }
     }
 }
