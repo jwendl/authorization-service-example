@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -35,7 +36,8 @@ namespace ApiExampleProject.Authentication.Handlers
             var authenticationHeaderValue = httpRequestHeaders.Authorization;
             if (authenticationHeaderValue != null && authenticationHeaderValue.Scheme == "Bearer" && !string.IsNullOrWhiteSpace(authenticationHeaderValue.Parameter))
             {
-                var accessToken = await tokenCreator.GetAccessTokenOnBehalfOf(authenticationHeaderValue.Parameter);
+                var scopes = new List<string>() { "https://graph.microsoft.com/User.Read" };
+                var accessToken = await tokenCreator.GetAccessTokenOnBehalfOf(scopes, authenticationHeaderValue.Parameter);
                 httpRequestHeaders.Authorization = new AuthenticationHeaderValue(authenticationHeaderValue.Scheme, accessToken);
             }
             else

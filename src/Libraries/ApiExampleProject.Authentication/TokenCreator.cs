@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Security;
 using System.Threading.Tasks;
@@ -98,16 +99,14 @@ namespace ApiExampleProject.Authentication
             }
         }
 
-        public async Task<string> GetAccessTokenOnBehalfOf(string userAssertionToken)
+        public async Task<string> GetAccessTokenOnBehalfOf(IEnumerable<string> scopes, string userAssertionToken)
         {
-            var scopes = tokenCreatorConfiguration.Scopes.Split(' ');
             var userAssertion = new UserAssertion(userAssertionToken);
             var confidentialClientApplication = confidentialClientApplicationBuilder
                 .WithTenantId(tokenCreatorConfiguration.TenantId.ToString())
                 .Build();
 
             var acquireTokenOnBehalfOfBuilder = confidentialClientApplication.AcquireTokenOnBehalfOf(scopes, userAssertion);
-
             try
             {
                 var authenticationResult = await acquireTokenOnBehalfOfBuilder.ExecuteAsync();

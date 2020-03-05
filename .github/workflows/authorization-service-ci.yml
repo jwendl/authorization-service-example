@@ -165,7 +165,7 @@ jobs:
           TokenCreator__TenantId: 1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378
           TokenCreator__ClientId: 0b861016-b56c-49b0-899a-b2e24537cb1d
           TokenCreator__ClientSecret: ${{ secrets.APP_CLIENT_SECRET }}
-          TokenCreator__Scopes: api://jwpolicymanager/user_impersonation https://graph.microsoft.com/User.Read
+          TokenCreator__Scopes: api://jwpolicymanager/user_impersonation
           TokenCreator__TestUsername: testuser@jwendl.net
           TokenCreator__TestPassword: ${{ secrets.TEST_PASSWORD }}
           TokenValidator__Audience: api://jwpolicymanager

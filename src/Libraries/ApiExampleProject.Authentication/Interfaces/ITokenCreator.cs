@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ApiExampleProject.Authentication.Interfaces
 {
@@ -10,6 +11,6 @@ namespace ApiExampleProject.Authentication.Interfaces
 
         Task<string> GetClientApplicationAccessTokenAsync();
 
-        Task<string> GetAccessTokenOnBehalfOf(string userAssertionToken);
+        Task<string> GetAccessTokenOnBehalfOf(IEnumerable<string> scopes, string userAssertionToken);
     }
 }
