@@ -35,9 +35,9 @@ namespace PolicyManager.DataAccess.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> ReadAllAsync(params Expression<Func<T, bool>>[] includes)
+        public async Task<IEnumerable<T>> ReadAllAsync(params Expression<Func<T, object>>[] includes)
         {
-            if (!(dataContext.Set<T>() is IIncludableQueryable<T, bool> query)) return new List<T>();
+            if (!(dataContext.Set<T>() is IIncludableQueryable<T, object> query)) return new List<T>();
 
             foreach (var include in includes)
             {
@@ -66,7 +66,21 @@ namespace PolicyManager.DataAccess.Repositories
                 .ToListAsync();
         }
 
-        public async Task<T> FindSingleAndIncludeAsync<TP>(Expression<Func<T, bool>> queryExpression, params Expression<Func<T, TP>>[] includes)
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> queryExpression, params Expression<Func<T, object>>[] includes)
+        {
+            var query = dataContext.Set<T>()
+                .Where(queryExpression);
+
+            foreach (var include in includes)
+            {
+                query = query
+                    .Include(include);
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<T> FindSingleAndIncludeAsync(Expression<Func<T, bool>> queryExpression, params Expression<Func<T, object>>[] includes)
         {
             var query = dataContext.Set<T>()
                 .Where(queryExpression);

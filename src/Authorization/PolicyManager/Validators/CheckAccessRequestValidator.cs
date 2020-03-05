@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using PolicyManager.Models;
+using PolicyManager.DataAccess.Models;
 
 namespace PolicyManager.Validators
 {

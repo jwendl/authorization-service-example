@@ -43,8 +43,19 @@ namespace ApiExampleProject.Authentication.Extensions
                 var options = sp.GetRequiredService<IOptions<TokenCreatorConfiguration>>();
                 var tokenCreatorConfiguration = options.Value;
 
-                return ConfidentialClientApplicationBuilder.Create(tokenCreatorConfiguration.ClientId)
-                    .WithClientSecret(tokenCreatorConfiguration.ClientSecret);
+                return ConfidentialClientApplicationBuilder
+                    .Create(tokenCreatorConfiguration.ClientId)
+                    .WithClientSecret(tokenCreatorConfiguration.ClientSecret)
+                    .WithAuthority(AzureCloudInstance.AzurePublic, tokenCreatorConfiguration.TenantId);
+            });
+            serviceCollection.AddSingleton<AbstractApplicationBuilder<PublicClientApplicationBuilder>, PublicClientApplicationBuilder>((sp) =>
+            {
+                var options = sp.GetRequiredService<IOptions<TokenCreatorConfiguration>>();
+                var tokenCreatorConfiguration = options.Value;
+
+                return PublicClientApplicationBuilder
+                    .Create(tokenCreatorConfiguration.ClientId)
+                    .WithAuthority(AzureCloudInstance.AzurePublic, tokenCreatorConfiguration.TenantId);
             });
 
             return serviceCollection;

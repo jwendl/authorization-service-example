@@ -133,23 +133,24 @@ jobs:
 
       - name: Test with dotnet
         run: |
-          pushd ./tests/
-          dotnet publish ./ApiExampleProject.IntegrationTests.sln --output ./output/
+          pushd ./src/IntegrationTests/ApiExampleProject.IntegrationTests
+          dotnet publish ./ApiExampleProject.IntegrationTests.csproj --output ../../../output/
+          popd
 
           pushd ./output/
           npm i azure-functions-core-tools@3 --unsafe-perm true
           chmod +x ./node_modules/azure-functions-core-tools/bin/func
           
-          pushd ../../policy-manager-publish
-          ../tests/output/node_modules/azure-functions-core-tools/bin/func start --csharp -p 7001 &
+          pushd ../policy-manager-publish
+          ../output/node_modules/azure-functions-core-tools/bin/func start --csharp -p 7001 &
           popd
 
-          pushd ../../customer-data-publish
-          ../tests/output/node_modules/azure-functions-core-tools/bin/func start --csharp -p 7002 &
+          pushd ../customer-data-publish
+          ../output/node_modules/azure-functions-core-tools/bin/func start --csharp -p 7002 &
           popd
           
-          pushd ../../order-data-publish
-          ../tests/output/node_modules/azure-functions-core-tools/bin/func start --csharp -p 7003 &
+          pushd ../order-data-publish
+          ../output/node_modules/azure-functions-core-tools/bin/func start --csharp -p 7003 &
           popd
 
           sudo apt-get install httping -y
@@ -159,15 +160,24 @@ jobs:
 
           dotnet vstest ApiExampleProject.IntegrationTests.dll --logger:"trx;LogFileName=integration-results.trx"
           popd
-          popd
         env:
           TokenCreator__TenantId: 1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378
           TokenCreator__ClientId: 0b861016-b56c-49b0-899a-b2e24537cb1d
           TokenCreator__ClientSecret: ${{ secrets.APP_CLIENT_SECRET }}
-          TokenCreator__Scopes: api://jwpolicymanager/.default
+          TokenCreator__Scopes: api://jwpolicymanager/user_impersonation
+          TokenCreator__TestUsername: testuser@jwendl.net
+          TokenCreator__TestPassword: ${{ secrets.TEST_PASSWORD }}
           TokenValidator__Audience: api://jwpolicymanager
           TokenValidator__TenantId: 1e1a5e3a-f0ea-45c9-9d80-d88e4d8ed378
           TokenValidator__ClientId: 0b861016-b56c-49b0-899a-b2e24537cb1d
+          PolicyManagerClientConfiguration__ApiServiceUri: http://localhost:7001/
+          CustomerDataClientConfiguration__ApiServiceUri: http://localhost:7002/
+
+      - name: Upload to Publish Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: test-results-publish
+          path: ./output/TestResults/integration-results.trx
 
   deployTerraformScripts:
     runs-on: ubuntu-latest

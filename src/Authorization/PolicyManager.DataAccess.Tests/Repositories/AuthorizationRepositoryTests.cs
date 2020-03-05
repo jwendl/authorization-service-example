@@ -102,7 +102,7 @@ namespace PolicyManager.DataAccess.Tests.Repositories
                 Expression = "userPrincipalName = \"juswen@microsoft.com\"",
             });
 
-            mockThingRepository.Setup(tr => tr.FindAsync(It.IsAny<Expression<Func<Thing, bool>>>()))
+            mockThingRepository.Setup(tr => tr.FindAsync(It.IsAny<Expression<Func<Thing, bool>>>(), It.IsAny<Expression<Func<Thing, object>>[]>()))
                 .Returns(Task.FromResult(new List<Thing>() { expectedThing }.AsEnumerable()));
 
             var microsoftGraphRepository = serviceProvider.GetRequiredService<IMicrosoftGraphRepository>();
@@ -161,7 +161,7 @@ namespace PolicyManager.DataAccess.Tests.Repositories
                 Expression = "user_location.Contains(\"Carnation, WA\")",
             });
 
-            mockThingRepository.Setup(tr => tr.FindAsync(It.IsAny<Expression<Func<Thing, bool>>>()))
+            mockThingRepository.Setup(tr => tr.FindAsync(It.IsAny<Expression<Func<Thing, bool>>>(), It.IsAny<Expression<Func<Thing, object>>[]>()))
                 .Returns(Task.FromResult(new List<Thing>() { expectedThing }.AsEnumerable()));
 
             var microsoftGraphRepository = serviceProvider.GetRequiredService<IMicrosoftGraphRepository>();
@@ -221,7 +221,7 @@ namespace PolicyManager.DataAccess.Tests.Repositories
                 Expression = "user_location.Contains(\"Redmond, WA\")",
             });
 
-            mockThingRepository.Setup(tr => tr.FindAsync(It.IsAny<Expression<Func<Thing, bool>>>()))
+            mockThingRepository.Setup(tr => tr.FindAsync(It.IsAny<Expression<Func<Thing, bool>>>(), It.IsAny<Expression<Func<Thing, object>>[]>()))
                 .Returns(Task.FromResult(new List<Thing>() { expectedThing }.AsEnumerable()));
 
             var microsoftGraphRepository = serviceProvider.GetRequiredService<IMicrosoftGraphRepository>();
