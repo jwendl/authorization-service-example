@@ -5,8 +5,12 @@ namespace ApiExampleProject.Authentication.Interfaces
 {
     public interface ITokenCreator
     {
-        Task<string> GetAccessTokenAsync();
+        Task<string> GetIntegrationTestTokenAsync();
 
-        Task<string> GetAccessTokenOnBehalfOf(string userAssertionToken);
+        Task<string> GetUserBasedAccessTokenAsync();
+
+        Task<string> GetClientApplicationAccessTokenAsync();
+
+        Task<string> GetAccessTokenOnBehalfOf(IEnumerable<string> scopes, string userAssertionToken);
     }
 }

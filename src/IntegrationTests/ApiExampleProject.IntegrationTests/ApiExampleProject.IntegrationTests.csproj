@@ -9,10 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ApiExampleProject.Authentication" Version="1.0.0" />
-    <PackageReference Include="ApiExampleProject.Common" Version="1.0.0" />
-    <PackageReference Include="ApiExampleProject.CustomerData.Client" Version="1.0.0" />
-    <PackageReference Include="ApiExampleProject.CustomerData.DataAccess" Version="1.0.0" />
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Bogus" Version="29.0.1" />
     <PackageReference Include="FluentAssertions" Version="5.10.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
@@ -24,13 +24,18 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
-    <PackageReference Include="PolicyManager.Client" Version="1.0.0" />
-    <PackageReference Include="PolicyManager.DataAccess" Version="1.0.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Authorization\PolicyManager.Client\PolicyManager.Client.csproj" />
+    <ProjectReference Include="..\..\Authorization\PolicyManager.DataAccess\PolicyManager.DataAccess.csproj" />
+    <ProjectReference Include="..\..\CustomerData\ApiExampleProject.CustomerData.Client\ApiExampleProject.CustomerData.Client.csproj" />
+    <ProjectReference Include="..\..\CustomerData\ApiExampleProject.CustomerData.DataAccess\ApiExampleProject.CustomerData.DataAccess.csproj" />
   </ItemGroup>
 
   <ItemGroup>

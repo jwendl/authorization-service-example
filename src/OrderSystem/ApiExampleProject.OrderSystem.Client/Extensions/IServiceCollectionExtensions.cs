@@ -28,11 +28,11 @@ namespace ApiExampleProject.OrderSystem.Client.Extensions
                 .WaitAndRetryAsync(3, retryAttempts => TimeSpan.FromMilliseconds(Math.Pow(2, retryAttempts)));
 
             serviceCollection.AddSingleton<HttpLoggingHandler>();
-            serviceCollection.AddSingleton<ServiceToServiceAuthenticationMessageHandler>();
+            serviceCollection.AddSingleton<AuthenticationMessageHandler>();
 
             serviceCollection.AddRefitClient<IOrderServiceClient>()
                 .AddPolicyHandler(asyncRetryPolicy)
-                .AddHttpMessageHandler<ServiceToServiceAuthenticationMessageHandler>()
+                .AddHttpMessageHandler<AuthenticationMessageHandler>()
                 .AddHttpMessageHandler<HttpLoggingHandler>()
                 .ConfigureHttpClient(http => http.BaseAddress = clientConfiguration.ApiServiceUri);
 

@@ -56,6 +56,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolicyManager.DataAccess.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolicyManager.Client", "Authorization\PolicyManager.Client\PolicyManager.Client.csproj", "{67574A98-5ECD-4A51-BCC9-532349D4E0E0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{09222359-55A1-413D-89E7-0C862C64007F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiExampleProject.IntegrationTests", "IntegrationTests\ApiExampleProject.IntegrationTests\ApiExampleProject.IntegrationTests.csproj", "{F0B5C28D-0364-4CBD-9788-75DCC4FEBF53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -130,6 +134,10 @@ Global
 		{67574A98-5ECD-4A51-BCC9-532349D4E0E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67574A98-5ECD-4A51-BCC9-532349D4E0E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67574A98-5ECD-4A51-BCC9-532349D4E0E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0B5C28D-0364-4CBD-9788-75DCC4FEBF53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0B5C28D-0364-4CBD-9788-75DCC4FEBF53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0B5C28D-0364-4CBD-9788-75DCC4FEBF53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0B5C28D-0364-4CBD-9788-75DCC4FEBF53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -152,6 +160,7 @@ Global
 		{0AEC9942-2BAF-4463-93B2-48EF911017E6} = {60E209AD-9D44-49E2-874A-CC33CBD69BC5}
 		{4CAFA85B-9DB3-4107-9621-626E1EA07886} = {60E209AD-9D44-49E2-874A-CC33CBD69BC5}
 		{67574A98-5ECD-4A51-BCC9-532349D4E0E0} = {60E209AD-9D44-49E2-874A-CC33CBD69BC5}
+		{F0B5C28D-0364-4CBD-9788-75DCC4FEBF53} = {09222359-55A1-413D-89E7-0C862C64007F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99588531-BCEA-4633-9CEA-D528BD083C14}

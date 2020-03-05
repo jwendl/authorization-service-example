@@ -76,7 +76,8 @@ namespace PolicyManager.DataAccess.Repositories
             var delegateAuthenticationProvider = new DelegateAuthenticationProvider(
                 async (requestMessage) =>
                 {
-                    var userToken = await tokenCreator.GetAccessTokenOnBehalfOf(authenticationHeaderValue.Parameter);
+                    var scopes = new List<string>() { "https://graph.microsoft.com/User.Read" };
+                    var userToken = await tokenCreator.GetAccessTokenOnBehalfOf(scopes, authenticationHeaderValue.Parameter);
 
                     // Append the access token to the request.
                     requestMessage.Headers.Authorization = new AuthenticationHeaderValue("bearer", userToken);

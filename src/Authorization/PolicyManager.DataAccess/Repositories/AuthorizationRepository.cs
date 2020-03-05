@@ -28,7 +28,7 @@ namespace PolicyManager.DataAccess.Repositories
             _ = initialState ?? throw new ArgumentNullException(nameof(initialState));
 
             var user = await microsoftGraphRepository.FetchMeAsync(authenticationHeaderValue);
-            var things = await thingRepository.FindAsync(t => t.Identifier == initialState.Identifier);
+            var things = await thingRepository.FindAsync(t => t.Identifier == initialState.Identifier, t => t.ThingAttributes, t => t.ThingPolicies);
 
             var expressionContext = new ExpressionContext();
             expressionContext.Imports.AddType(typeof(ListParser));

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -17,7 +16,6 @@ using Microsoft.Graph;
 using Microsoft.OpenApi.Models;
 using PolicyManager.DataAccess.Interfaces;
 using PolicyManager.DataAccess.Models;
-using PolicyManager.Models;
 using PolicyManager.Resources;
 using PolicyManager.Validators;
 
@@ -60,8 +58,6 @@ namespace PolicyManager
             }
 
             var groups = await microsoftGraphRepository.FetchMyGroupsAsync(req.Headers.Authorization);
-
-            var authenticationHeaderValue = new AuthenticationHeaderValue("test");
             var initialState = new InitialState<Group>()
             {
                 ClaimsPrincipal = claimsPrincipal,
@@ -69,7 +65,7 @@ namespace PolicyManager
                 Groups = groups,
             };
 
-            var policyResults = await authorizationRepository.EvaluateAsync(authenticationHeaderValue, initialState);
+            var policyResults = await authorizationRepository.EvaluateAsync(req.Headers.Authorization, initialState);
             log.LogInformation(PolicyManagerResources.CheckAccessEndLog);
 
             var content = new StringContent(JsonSerializer.Serialize(policyResults), Encoding.UTF8, ContentTypes.Application.Json);
