@@ -34,23 +34,26 @@ namespace ApiExampleProject.Authentication.Handlers
             // [Headers("Authorization: Bearer")]
             // If we have a token, then we want to use that token - otherwise generate a service to service one.
             var authenticationHeaderValue = httpRequestHeaders.Authorization;
-            if (authenticationHeaderValue != null && authenticationHeaderValue.Scheme == "Bearer" && !string.IsNullOrWhiteSpace(authenticationHeaderValue.Parameter))
+            if (authenticationHeaderValue != null)
             {
-                var scopes = new List<string>() { "https://graph.microsoft.com/User.Read" };
-                var accessToken = await tokenCreator.GetAccessTokenOnBehalfOf(scopes, authenticationHeaderValue.Parameter);
-                httpRequestHeaders.Authorization = new AuthenticationHeaderValue(authenticationHeaderValue.Scheme, accessToken);
-            }
-            else
-            {
-                if (!string.IsNullOrWhiteSpace(tokenCreatorConfiguration.TestUsername) && !string.IsNullOrWhiteSpace(tokenCreatorConfiguration.TestPassword))
+                if (authenticationHeaderValue.Scheme == "Bearer" && !string.IsNullOrWhiteSpace(authenticationHeaderValue.Parameter))
                 {
-                    var accessToken = await tokenCreator.GetIntegrationTestTokenAsync();
+                    var scopes = new List<string>() { "https://graph.microsoft.com/User.Read" };
+                    var accessToken = await tokenCreator.GetAccessTokenOnBehalfOf(scopes, authenticationHeaderValue.Parameter);
                     httpRequestHeaders.Authorization = new AuthenticationHeaderValue(authenticationHeaderValue.Scheme, accessToken);
                 }
                 else
                 {
-                    var accessToken = await tokenCreator.GetClientApplicationAccessTokenAsync();
-                    httpRequestHeaders.Authorization = new AuthenticationHeaderValue(authenticationHeaderValue.Scheme, accessToken);
+                    if (!string.IsNullOrWhiteSpace(tokenCreatorConfiguration.TestUsername) && !string.IsNullOrWhiteSpace(tokenCreatorConfiguration.TestPassword))
+                    {
+                        var accessToken = await tokenCreator.GetIntegrationTestTokenAsync();
+                        httpRequestHeaders.Authorization = new AuthenticationHeaderValue(authenticationHeaderValue.Scheme, accessToken);
+                    }
+                    else
+                    {
+                        var accessToken = await tokenCreator.GetClientApplicationAccessTokenAsync();
+                        httpRequestHeaders.Authorization = new AuthenticationHeaderValue(authenticationHeaderValue.Scheme, accessToken);
+                    }
                 }
             }
 
