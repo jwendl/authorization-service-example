@@ -177,7 +177,7 @@ jobs:
       - name: Upload to Publish Artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: policy-manager-publish
+          name: test-results-publish
           path: ./output/TestResults/integration-results.trx
 
   deployTerraformScripts:
