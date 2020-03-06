@@ -8,6 +8,8 @@ This is an Azure Function application that creates an authorization service whic
 
 The overall architecture includes APIM, Azure Functions, Azure SQL Database, Cosmos Database and Azure Active Directory components.
 
+More information about each component exists as [PolicyManager](./src/Authorization/README.md), [CustomerData](./src/CustomerData/README.md) and [OrderData](./src/OrderData/README.md)
+
 ![Architecture](docs/images/overall.png)
 
 ## Getting Started
