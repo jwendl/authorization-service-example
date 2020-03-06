@@ -6,14 +6,20 @@
 
 This is an Azure Function application that creates an authorization service which utilizes ABAC and PBAC principals to grant access to various microservices. 
 
+The overall architecture includes APIM, Azure Functions, Azure SQL Database, Cosmos Database and Azure Active Directory components.
+
+![Architecture](docs/images/overall.png)
+
 ## Getting Started
 
 1. Clone the repository
 2. Open the ApiExampleProject\ApiExampleProject.sln file with Visual Studio
+3. Right click the API you'd wish to run locally (PolicyManager, CustomerData, OrderData) and select "Set as Startup Project"
 
 ## Build and Test
 
 TBD, right now set the right project up on startup and debug the application. In the future will use a build script.
 
-## Contribute
+## Contributing
 
+Contributing is easy 🙏. Look for an issue that is tagged as ["good first issue"](https://github.com/jwendl/authorization-service-example/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22), fork this repo, make your contributions and then create a PR. See the [Guide](https://guides.github.com/introduction/flow/) for more information.
