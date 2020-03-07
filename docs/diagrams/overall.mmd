@@ -1,0 +1,7 @@
+graph TD
+    APIM --> PolicyManager
+    APIM --> CustomerData
+    APIM --> OrderData
+    PolicyManager --> SqlAzureA
+    CustomerData --> SqlAzureB
+    OrderData --> CosmosDb
