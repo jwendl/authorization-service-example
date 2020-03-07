@@ -20,7 +20,27 @@ More information about each component exists as [PolicyManager](./src/Authorizat
 
 ## Build and Test
 
-TBD, right now set the right project up on startup and debug the application. In the future will use a build script.
+### Visual Studio
+
+1. Open the ApiExampleProject\ApiExampleProject.sln file with Visual Studio
+2. Right click the API you'd wish to run locally (PolicyManager, CustomerData, OrderData) and select "Set as Startup Project"
+
+### Using Bash or WSL
+
+``` bash
+pushd src
+dotnet build ApiExampleProject.sln
+cd src/Authorization/PolicyManager/
+dotnet run PolicyManager
+pushd 
+
+popd
+popd
+```
+
+### Visual Studio Code
+
+TBD
 
 ## Contributing
 
