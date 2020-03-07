@@ -41,6 +41,8 @@ PolicyManager is the main function application. PolicyManager.Client is a client
 
 I'd recommend testing this API using the integration test called PolicyManagerTests or using [Insomnia REST Client](https://insomnia.rest/) to test the endpoint. Setting up [Insomnia REST Client](https://insomnia.rest/) is simple as explained on this [blog article](https://jwendl.net/2018/11/06/using-insomnia-to-test-aad-v2/).
 
+Here is the [Open API](http://jwpolicymanagerapi.azurewebsites.net/api/docs) description for this API.
+
 Read Things
 
 ``` bash
@@ -76,8 +78,6 @@ Result
   "name": "Customer Data",
   "description": "Enables access to customer data",
   "identifier": "/api/customer/",
-  "thingAttributes": [],
-  "thingPolicies": [],
   "id": "3c713953-d6b4-4edd-beda-79f2fa894a8c"
 }
 ```
