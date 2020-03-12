@@ -6,6 +6,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NeutralLanguage>en-US</NeutralLanguage>
     <ProjectGuid>{F0B5C28D-0364-4CBD-9788-75DCC4FEBF53}</ProjectGuid>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
