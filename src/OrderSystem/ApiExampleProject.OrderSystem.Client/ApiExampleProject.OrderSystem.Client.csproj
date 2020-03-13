@@ -6,7 +6,7 @@
     <CodeAnalysisRuleSet>$(RepoDir)\Global.ruleset</CodeAnalysisRuleSet>
     <NeutralLanguage>en-US</NeutralLanguage>
     <ProjectGuid>{D4B1E5A4-73AD-4E5F-9175-9C5DC6E6D421}</ProjectGuid>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
