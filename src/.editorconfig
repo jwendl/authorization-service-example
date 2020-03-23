@@ -114,19 +114,9 @@ csharp_space_between_method_call_name_and_opening_parenthesis = false
 csharp_space_between_method_call_empty_parameter_list_parentheses = false 
 # Wrapping preferences 
 csharp_preserve_single_line_statements = true 
-csharp_preserve_single_line_blocks = true 
+csharp_preserve_single_line_blocks = true
 
-# CA1303: Do not pass literals as localized parameters
+# Code Quality Rules
 dotnet_diagnostic.CA1303.severity = none
-
-# CA1710: Identifiers should have correct suffix
 dotnet_diagnostic.CA1710.severity = none
-
-# CA2007: Consider calling ConfigureAwait on the awaited task
 dotnet_diagnostic.CA2007.severity = none
-
-# Package version 2.9.0 and later
-dotnet_code_quality.CA2007.exclude_async_void_methods = true
-
-# Package version 2.6.3 and earlier
-dotnet_code_quality.CA2007.skip_async_void_methods = true
